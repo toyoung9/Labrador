@@ -13,6 +13,10 @@
 		C3C866FF21189554000110A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C3C866FE21189554000110A9 /* Assets.xcassets */; };
 		C3C8670221189554000110A9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3C8670021189554000110A9 /* LaunchScreen.storyboard */; };
 		C3C8670521189554000110A9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C8670421189554000110A9 /* main.m */; };
+		C3C8670E21189637000110A9 /* LABAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C8670D21189637000110A9 /* LABAudioPlayer.m */; };
+		C3C867112118967E000110A9 /* LABStore.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C867102118967E000110A9 /* LABStore.m */; };
+		C3C8671421189695000110A9 /* LABDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C8671321189695000110A9 /* LABDownloader.m */; };
+		C3C86717211897CC000110A9 /* LABStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C86716211897CC000110A9 /* LABStoreManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +30,14 @@
 		C3C8670121189554000110A9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C3C8670321189554000110A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C3C8670421189554000110A9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C3C8670C21189637000110A9 /* LABAudioPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LABAudioPlayer.h; sourceTree = "<group>"; };
+		C3C8670D21189637000110A9 /* LABAudioPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LABAudioPlayer.m; sourceTree = "<group>"; };
+		C3C8670F2118967E000110A9 /* LABStore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LABStore.h; sourceTree = "<group>"; };
+		C3C867102118967E000110A9 /* LABStore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LABStore.m; sourceTree = "<group>"; };
+		C3C8671221189695000110A9 /* LABDownloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LABDownloader.h; sourceTree = "<group>"; };
+		C3C8671321189695000110A9 /* LABDownloader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LABDownloader.m; sourceTree = "<group>"; };
+		C3C86715211897CC000110A9 /* LABStoreManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LABStoreManager.h; sourceTree = "<group>"; };
+		C3C86716211897CC000110A9 /* LABStoreManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LABStoreManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +87,14 @@
 		C3C8670B21189580000110A9 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				C3C8670C21189637000110A9 /* LABAudioPlayer.h */,
+				C3C8670D21189637000110A9 /* LABAudioPlayer.m */,
+				C3C86715211897CC000110A9 /* LABStoreManager.h */,
+				C3C86716211897CC000110A9 /* LABStoreManager.m */,
+				C3C8670F2118967E000110A9 /* LABStore.h */,
+				C3C867102118967E000110A9 /* LABStore.m */,
+				C3C8671221189695000110A9 /* LABDownloader.h */,
+				C3C8671321189695000110A9 /* LABDownloader.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -150,7 +170,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				C3C866FA21189551000110A9 /* ViewController.m in Sources */,
+				C3C867112118967E000110A9 /* LABStore.m in Sources */,
+				C3C8670E21189637000110A9 /* LABAudioPlayer.m in Sources */,
+				C3C86717211897CC000110A9 /* LABStoreManager.m in Sources */,
 				C3C8670521189554000110A9 /* main.m in Sources */,
+				C3C8671421189695000110A9 /* LABDownloader.m in Sources */,
 				C3C866F721189551000110A9 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -293,6 +317,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Labrador/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -309,6 +334,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Labrador/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
