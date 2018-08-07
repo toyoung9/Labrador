@@ -16,7 +16,7 @@ struct LABCacheInformation {
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface LABStore : NSObject
+@interface LABCache : NSObject
 
 @end
 

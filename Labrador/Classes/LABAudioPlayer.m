@@ -7,12 +7,12 @@
 //
 
 #import "LABAudioPlayer.h"
-#import "LABStoreManager.h"
+#import "LABCacheManager.h"
 
 @interface LABAudioPlayer()
 {
     //store manager: download and store caching information
-    LABStoreManager *_storeManager ;
+    LABCacheManager *_storeManager ;
 }
 @end
 @implementation LABAudioPlayer
