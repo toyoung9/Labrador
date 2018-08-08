@@ -7,19 +7,36 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C3820C45211AC60500EA0BD5 /* LabradorAFSParser.m in Sources */ = {isa = PBXBuildFile; fileRef = C3820C44211AC60500EA0BD5 /* LabradorAFSParser.m */; };
+		C3820C48211ACE9600EA0BD5 /* LabradorLocalProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = C3820C47211ACE9600EA0BD5 /* LabradorLocalProvider.m */; };
+		C3820C4B211ACED600EA0BD5 /* t.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C3820C4A211ACED600EA0BD5 /* t.mp3 */; };
+		C3820C52211AFDFA00EA0BD5 /* LabradorInnerPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C3820C51211AFDFA00EA0BD5 /* LabradorInnerPlayer.m */; };
+		C3820C55211B06CF00EA0BD5 /* LabradorAudioDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C3820C54211B06CF00EA0BD5 /* LabradorAudioDataModel.m */; };
 		C3C866F721189551000110A9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C866F621189551000110A9 /* AppDelegate.m */; };
 		C3C866FA21189551000110A9 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C866F921189551000110A9 /* ViewController.m */; };
 		C3C866FD21189551000110A9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3C866FB21189551000110A9 /* Main.storyboard */; };
 		C3C866FF21189554000110A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C3C866FE21189554000110A9 /* Assets.xcassets */; };
 		C3C8670221189554000110A9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3C8670021189554000110A9 /* LaunchScreen.storyboard */; };
 		C3C8670521189554000110A9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C8670421189554000110A9 /* main.m */; };
-		C3C8670E21189637000110A9 /* LABAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C8670D21189637000110A9 /* LABAudioPlayer.m */; };
+		C3C8670E21189637000110A9 /* LabradorAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C8670D21189637000110A9 /* LabradorAudioPlayer.m */; };
 		C3C867112118967E000110A9 /* LABCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C867102118967E000110A9 /* LABCache.m */; };
 		C3C8671421189695000110A9 /* LABDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C8671321189695000110A9 /* LABDownloader.m */; };
 		C3C86717211897CC000110A9 /* LABCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C86716211897CC000110A9 /* LABCacheManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C3820C41211AC56B00EA0BD5 /* LabradorParseProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LabradorParseProtocol.h; sourceTree = "<group>"; };
+		C3820C43211AC60500EA0BD5 /* LabradorAFSParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LabradorAFSParser.h; sourceTree = "<group>"; };
+		C3820C44211AC60500EA0BD5 /* LabradorAFSParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LabradorAFSParser.m; sourceTree = "<group>"; };
+		C3820C46211ACE9600EA0BD5 /* LabradorLocalProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LabradorLocalProvider.h; sourceTree = "<group>"; };
+		C3820C47211ACE9600EA0BD5 /* LabradorLocalProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LabradorLocalProvider.m; sourceTree = "<group>"; };
+		C3820C4A211ACED600EA0BD5 /* t.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = t.mp3; sourceTree = "<group>"; };
+		C3820C4C211ACF3400EA0BD5 /* Labrador.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Labrador.h; sourceTree = "<group>"; };
+		C3820C4E211AFBC900EA0BD5 /* LabradorDataProviderProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LabradorDataProviderProtocol.h; sourceTree = "<group>"; };
+		C3820C50211AFDFA00EA0BD5 /* LabradorInnerPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LabradorInnerPlayer.h; sourceTree = "<group>"; };
+		C3820C51211AFDFA00EA0BD5 /* LabradorInnerPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LabradorInnerPlayer.m; sourceTree = "<group>"; };
+		C3820C53211B06CF00EA0BD5 /* LabradorAudioDataModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LabradorAudioDataModel.h; sourceTree = "<group>"; };
+		C3820C54211B06CF00EA0BD5 /* LabradorAudioDataModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LabradorAudioDataModel.m; sourceTree = "<group>"; };
 		C3C866F221189551000110A9 /* Labrador.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Labrador.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3C866F521189551000110A9 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C3C866F621189551000110A9 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -30,8 +47,8 @@
 		C3C8670121189554000110A9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C3C8670321189554000110A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C3C8670421189554000110A9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		C3C8670C21189637000110A9 /* LABAudioPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LABAudioPlayer.h; sourceTree = "<group>"; };
-		C3C8670D21189637000110A9 /* LABAudioPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LABAudioPlayer.m; sourceTree = "<group>"; };
+		C3C8670C21189637000110A9 /* LabradorAudioPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LabradorAudioPlayer.h; sourceTree = "<group>"; };
+		C3C8670D21189637000110A9 /* LabradorAudioPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LabradorAudioPlayer.m; sourceTree = "<group>"; };
 		C3C8670F2118967E000110A9 /* LABCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LABCache.h; sourceTree = "<group>"; };
 		C3C867102118967E000110A9 /* LABCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LABCache.m; sourceTree = "<group>"; };
 		C3C8671221189695000110A9 /* LABDownloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LABDownloader.h; sourceTree = "<group>"; };
@@ -51,6 +68,45 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C3820C42211AC5D500EA0BD5 /* parse */ = {
+			isa = PBXGroup;
+			children = (
+				C3820C43211AC60500EA0BD5 /* LabradorAFSParser.h */,
+				C3820C44211AC60500EA0BD5 /* LabradorAFSParser.m */,
+				C3820C46211ACE9600EA0BD5 /* LabradorLocalProvider.h */,
+				C3820C47211ACE9600EA0BD5 /* LabradorLocalProvider.m */,
+			);
+			path = parse;
+			sourceTree = "<group>";
+		};
+		C3820C49211ACEC900EA0BD5 /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				C3820C4A211ACED600EA0BD5 /* t.mp3 */,
+			);
+			path = resources;
+			sourceTree = "<group>";
+		};
+		C3820C4D211AFBB400EA0BD5 /* protocol */ = {
+			isa = PBXGroup;
+			children = (
+				C3820C41211AC56B00EA0BD5 /* LabradorParseProtocol.h */,
+				C3820C4E211AFBC900EA0BD5 /* LabradorDataProviderProtocol.h */,
+			);
+			path = protocol;
+			sourceTree = "<group>";
+		};
+		C3820C4F211AFD5E00EA0BD5 /* player */ = {
+			isa = PBXGroup;
+			children = (
+				C3820C50211AFDFA00EA0BD5 /* LabradorInnerPlayer.h */,
+				C3820C51211AFDFA00EA0BD5 /* LabradorInnerPlayer.m */,
+				C3820C53211B06CF00EA0BD5 /* LabradorAudioDataModel.h */,
+				C3820C54211B06CF00EA0BD5 /* LabradorAudioDataModel.m */,
+			);
+			path = player;
+			sourceTree = "<group>";
+		};
 		C3C866E921189551000110A9 = {
 			isa = PBXGroup;
 			children = (
@@ -70,7 +126,8 @@
 		C3C866F421189551000110A9 /* Labrador */ = {
 			isa = PBXGroup;
 			children = (
-				C3C8670B21189580000110A9 /* Classes */,
+				C3820C49211ACEC900EA0BD5 /* resources */,
+				C3C8670B21189580000110A9 /* classes */,
 				C3C866F521189551000110A9 /* AppDelegate.h */,
 				C3C866F621189551000110A9 /* AppDelegate.m */,
 				C3C866F821189551000110A9 /* ViewController.h */,
@@ -84,19 +141,23 @@
 			path = Labrador;
 			sourceTree = "<group>";
 		};
-		C3C8670B21189580000110A9 /* Classes */ = {
+		C3C8670B21189580000110A9 /* classes */ = {
 			isa = PBXGroup;
 			children = (
-				C3C8670C21189637000110A9 /* LABAudioPlayer.h */,
-				C3C8670D21189637000110A9 /* LABAudioPlayer.m */,
+				C3820C4F211AFD5E00EA0BD5 /* player */,
+				C3820C4D211AFBB400EA0BD5 /* protocol */,
+				C3820C42211AC5D500EA0BD5 /* parse */,
+				C3C8670C21189637000110A9 /* LabradorAudioPlayer.h */,
+				C3C8670D21189637000110A9 /* LabradorAudioPlayer.m */,
 				C3C86715211897CC000110A9 /* LABCacheManager.h */,
 				C3C86716211897CC000110A9 /* LABCacheManager.m */,
 				C3C8670F2118967E000110A9 /* LABCache.h */,
 				C3C867102118967E000110A9 /* LABCache.m */,
 				C3C8671221189695000110A9 /* LABDownloader.h */,
 				C3C8671321189695000110A9 /* LABDownloader.m */,
+				C3820C4C211ACF3400EA0BD5 /* Labrador.h */,
 			);
-			path = Classes;
+			path = classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -159,6 +220,7 @@
 				C3C8670221189554000110A9 /* LaunchScreen.storyboard in Resources */,
 				C3C866FF21189554000110A9 /* Assets.xcassets in Resources */,
 				C3C866FD21189551000110A9 /* Main.storyboard in Resources */,
+				C3820C4B211ACED600EA0BD5 /* t.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,11 +233,15 @@
 			files = (
 				C3C866FA21189551000110A9 /* ViewController.m in Sources */,
 				C3C867112118967E000110A9 /* LABCache.m in Sources */,
-				C3C8670E21189637000110A9 /* LABAudioPlayer.m in Sources */,
+				C3C8670E21189637000110A9 /* LabradorAudioPlayer.m in Sources */,
 				C3C86717211897CC000110A9 /* LABCacheManager.m in Sources */,
 				C3C8670521189554000110A9 /* main.m in Sources */,
 				C3C8671421189695000110A9 /* LABDownloader.m in Sources */,
+				C3820C55211B06CF00EA0BD5 /* LabradorAudioDataModel.m in Sources */,
+				C3820C52211AFDFA00EA0BD5 /* LabradorInnerPlayer.m in Sources */,
+				C3820C48211ACE9600EA0BD5 /* LabradorLocalProvider.m in Sources */,
 				C3C866F721189551000110A9 /* AppDelegate.m in Sources */,
+				C3820C45211AC60500EA0BD5 /* LabradorAFSParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
