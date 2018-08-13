@@ -8,13 +8,16 @@
 
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioQueue.h>
-#import "LabradorAudioDataModel.h"
+#import "LabradorAudioPacket.h"
+#import "LabradorDataProvider.h"
 
-
+@protocol LabradorInnerPlayerDataProvider <NSObject>
+- (LabradorAudioFrame *)getNextFrame ;
+@end
 @interface LabradorInnerPlayer : NSObject
 
 - (instancetype)init NS_UNAVAILABLE ;
-- (instancetype)initWithDescription:(AudioStreamBasicDescription)description ;
-- (void)receiveData:(LabradorAudioDataModel)audioDataModel ;
+- (instancetype)initWithDescription:(AudioStreamBasicDescription)description
+                           provider:(id<LabradorInnerPlayerDataProvider>)provider;
 
 @end

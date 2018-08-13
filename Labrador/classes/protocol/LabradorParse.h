@@ -9,7 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioQueue.h>
 
-@protocol LabradorParseProtocol <NSObject>
+@class LabradorAudioFrame ;
+@protocol LabradorParse <NSObject>
 - (AudioStreamBasicDescription)parse;
+- (LabradorAudioFrame *)product:(UInt32)minByteSize;
 @end
 

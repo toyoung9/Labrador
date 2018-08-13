@@ -7,92 +7,118 @@
 //
 
 #import "LabradorInnerPlayer.h"
+#import "configure.h"
+
 
 @interface LabradorInnerPlayer()
 {
     AudioStreamBasicDescription _audioStreamBasicDescription ;
     AudioQueueRef _aqr;
-    UInt32 _bufferByteSize;
-    AudioQueueBufferRef buffers[3];
-    
-    
+//    UInt32 _bufferByteSize;
+    CFMutableArrayRef _buffers ;
+    dispatch_queue_t _playQueue ;
+    NSThread *_playThread ;
+    NSPort *_playPort ;
+    NSRunLoop *_playRunLoop ;
 }
-@property(nonatomic, strong)NSCondition *lock ;
-@property(nonatomic, strong)NSMutableArray<LabradorAudioDataModel *> *audioDataModels;
+
+@property(nonatomic,weak)id<LabradorInnerPlayerDataProvider> dataProvider ;
+
+- (void)enqueue:(AudioQueueBufferRef)inBuffer;
 @end
 
 
 void Labrador_AudioQueueOutputCallback(void * __nullable       inUserData,
                                        AudioQueueRef           inAQ,
                                        AudioQueueBufferRef     inBuffer){
+    NSLog(@"回收音频缓存数据") ;
     LabradorInnerPlayer *this = (__bridge LabradorInnerPlayer *)inUserData ;
-    [this.lock lock] ;
-    if(this.audioDataModels.count == 0) {
-        [this.lock wait] ;
-    }
-    LabradorAudioDataModel *audioDataModel = this.audioDataModels.firstObject ;
-    memcpy(inBuffer->mAudioData, audioDataModel.audioData.mAudioData, audioDataModel.audioData.mAudioDataByteSize) ;
-    inBuffer->mPacketDescriptionCount = audioDataModel.audioData.mPacketDescriptionCount ;
-#error
-    [this.audioDataModels removeObjectAtIndex:0] ;
-    [this.lock unlock] ;
+    [this enqueue:inBuffer] ;
 }
 
 @implementation LabradorInnerPlayer
 
 - (void)dealloc
 {
-    for(int i = 0; i < 3; i ++) {
-        AudioQueueFreeBuffer(_aqr, buffers[i]) ;
+    [_playRunLoop removePort:_playPort forMode:NSRunLoopCommonModes] ;
+    [_playThread cancel] ;
+    for(int i = 0; i < CFArrayGetCount(_buffers); i ++) {
+        AudioQueueFreeBuffer(_aqr, (AudioQueueBufferRef)CFArrayGetValueAtIndex(_buffers, i));
     }
+    CFArrayRemoveAllValues(_buffers) ;
 }
 - (instancetype)initWithDescription:(AudioStreamBasicDescription)description
+                           provider:(id<LabradorInnerPlayerDataProvider>)provider
 {
     self = [super init];
     if (self) {
         _audioStreamBasicDescription = description ;
-        _bufferByteSize = 1024 * 5 ;
-        _audioDataModels = [[NSMutableArray<LabradorAudioDataModel *> alloc] init] ;
-        _lock = [[NSCondition alloc] init] ;
-        [self initializeAudioQueue] ;
+        _buffers = CFArrayCreateMutable(CFAllocatorGetDefault(), 0, NULL) ;
+        _dataProvider = provider ;
+        _playPort = [NSPort port] ;
+        _playThread = [[NSThread alloc] initWithTarget:self selector:@selector(initializeAudioQueue) object:nil] ;
+        [_playThread start] ;
     }
     return self;
 }
 
 - (void)initializeAudioQueue {
+    _playRunLoop = [NSRunLoop currentRunLoop] ;
+    [[NSRunLoop currentRunLoop] addPort:_playPort forMode:NSRunLoopCommonModes] ;
     OSStatus status = AudioQueueNewOutput(&_audioStreamBasicDescription,
                                           Labrador_AudioQueueOutputCallback,
                                           (__bridge void *)self,
-                                          CFRunLoopGetCurrent(),
-                                          kCFRunLoopCommonModes,
+                                          NULL,
+                                          NULL,
                                           0,
                                           &_aqr);
-    if(!status) {
+    if(status != noErr) {
         NSLog(@"AudioQueueNewOutput error: %d", (int)status) ;
+        AudioQueueDispose(_aqr, YES) ;
         return ;
     }
+    
     for(int i = 0; i < 3; i ++) {
         AudioQueueBufferRef buffer = NULL ;
-        status = AudioQueueAllocateBuffer(_aqr, _bufferByteSize, &buffer) ;
-        if(!status) {
+        status = AudioQueueAllocateBuffer(_aqr, LabradorAudioQueueBufferCacheSize * 2, &buffer) ;
+        if(status != noErr) {
             NSLog(@"AudioQueueAllocateBuffer error: %d", (int)status) ;
             break ;
         }
-        buffer[i] = *buffer ;
-        status = AudioQueueEnqueueBuffer(_aqr, buffer, 0, NULL) ;
-        if(!status) {
-            NSLog(@"AudioQueueEnqueueBuffer error: %d", (int)status) ;
-            break ;
-        }
-        
+        CFArrayAppendValue(_buffers, buffer) ;
+        [self enqueue:buffer] ;
     }
+    AudioQueueStart(_aqr, NULL) ;
 }
 
-- (void)receiveData:(LabradorAudioDataModel *)audioData {
-    [_lock lock] ;
-    [_audioDataModels addObject:audioData] ;
-    [_lock signal] ;
-    [_lock unlock] ;
+- (void)enqueue:(AudioQueueBufferRef)inBuffer {
+    LabradorAudioFrame *frame = [self.dataProvider getNextFrame] ;
+    if(frame) {
+        UInt32 offset = 0 ;
+        AudioStreamPacketDescription *aspds = (AudioStreamPacketDescription *)malloc(sizeof(AudioStreamPacketDescription) * frame.packets.count) ;
+        for(int i = 0; i < frame.packets.count; i ++) {
+            LabradorAudioPacket *packet = frame.packets[i] ;
+            memcpy(inBuffer->mAudioData + offset,
+                   packet.data,
+                   packet.byteSize) ;
+            memcpy(aspds + i, packet.packetDescriptions, sizeof(AudioStreamPacketDescription)) ;
+            offset += packet.byteSize ;
+        }
+        inBuffer->mAudioDataByteSize = offset ;
+        inBuffer->mPacketDescriptionCount = (UInt32)frame.packets.count ;
+        OSStatus status = AudioQueueEnqueueBuffer(_aqr,
+                                                  inBuffer,
+                                                 (UInt32)frame.packets.count,
+                                                  aspds) ;
+        if(status != noErr) {
+            NSLog(@"AudioQueueEnqueueBuffer error: %d", (int)status) ;
+        }
+        free(aspds) ;
+        NSLog(@"入队列: %u", offset) ;
+        NSLog(@"------------------------------------------------------------------") ;
+    } else {
+        NSLog(@"未得到音频帧") ;
+    }
 }
 
 @end

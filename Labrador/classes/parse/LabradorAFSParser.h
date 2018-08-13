@@ -7,13 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "LabradorParseProtocol.h"
-#import "LabradorDataProviderProtocol.h"
+#import "LabradorParse.h"
+#import "LabradorDataProvider.h"
 
-@interface LabradorAFSParser : NSObject <LabradorParseProtocol>
+@interface LabradorAFSParser : NSObject <LabradorParse>
 
 - (instancetype)init NS_UNAVAILABLE ;;
-- (instancetype)init:(id<LabradorDataProviderProtocol>)provider ;
+- (instancetype)init:(id<LabradorDataProvider>)provider ;
 
 
 @end

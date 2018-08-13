@@ -7,24 +7,23 @@
 //
 
 #import "ViewController.h"
-#import "LabradorLocalProvider.h"
-#import "LabradorDataProviderProtocol.h"
-#import "LabradorAFSParser.h"
+#import "LabradorAudioPlayer.h"
 
 @interface ViewController ()
-
+{
+    LabradorAudioPlayer *_player ;
+}
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    id<LabradorDataProviderProtocol> provider = [[LabradorLocalProvider alloc] init] ;
-    id<LabradorParseProtocol> parser = [[LabradorAFSParser alloc] init:provider] ;
-    AudioStreamBasicDescription bd = [parser parse] ;
-    
-    NSLog(@"...") ;
+    self.view.backgroundColor = [UIColor orangeColor] ;
 }
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    _player = [[LabradorAudioPlayer alloc] init] ;
+}
 
 @end

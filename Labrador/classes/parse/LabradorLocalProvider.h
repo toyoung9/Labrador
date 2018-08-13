@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "LabradorDataProviderProtocol.h"
+#import "LabradorDataProvider.h"
 
-@interface LabradorLocalProvider : NSObject <LabradorDataProviderProtocol>
+@interface LabradorLocalProvider : NSObject <LabradorDataProvider>
 
 @end
