@@ -13,7 +13,7 @@
 - (void)dealloc
 {
 //    NSLog(@"LabradorAudioPacket dealloc") ;
-    free(self.packetDescriptions) ;
+    free(self.packetDescription) ;
     free(self.data) ;
 }
 - (instancetype)initWithAudioData:(void const *)data
@@ -23,8 +23,8 @@
         self.data = malloc(packetDescriptions.mDataByteSize) ;
         memcpy(self.data, data + packetDescriptions.mStartOffset, packetDescriptions.mDataByteSize) ;
         uint32_t descriptionsByteSize =  sizeof(AudioStreamPacketDescription) ;
-        self.packetDescriptions = malloc(descriptionsByteSize);
-        memcpy(self.packetDescriptions, &packetDescriptions, descriptionsByteSize) ;
+        self.packetDescription = malloc(descriptionsByteSize);
+        memcpy(self.packetDescription, &packetDescriptions, descriptionsByteSize) ;
         self.byteSize = packetDescriptions.mDataByteSize ;
 //        NSLog(@"%p",self) ;
     }

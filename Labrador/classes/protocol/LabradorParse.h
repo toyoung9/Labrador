@@ -11,7 +11,8 @@
 
 @class LabradorAudioFrame ;
 @protocol LabradorParse <NSObject>
-- (AudioStreamBasicDescription)parse;
+- (AudioStreamBasicDescription)getAudioStreamBasicDescription;
 - (LabradorAudioFrame *)product:(UInt32)minByteSize;
+- (float)duration;
 @end
 

@@ -17,7 +17,7 @@
 
 @property(nonatomic, assign)void *data ;
 @property(nonatomic, assign)UInt32 byteSize;
-@property(nonatomic, assign)AudioStreamPacketDescription *packetDescriptions;
+@property(nonatomic, assign)AudioStreamPacketDescription *packetDescription;
 
 @end
 

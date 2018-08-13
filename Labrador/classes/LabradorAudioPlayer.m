@@ -47,7 +47,7 @@
     _parser = [[LabradorAFSParser alloc] init:_dataProvider] ;
 }
 - (void)initializeInnerPlayer {
-    AudioStreamBasicDescription description = _parser.parse ;
+    AudioStreamBasicDescription description = [_parser getAudioStreamBasicDescription] ;
     NSAssert(description.mSampleRate > 0, @"LabradorParse initialize failure.") ;
     _innerPlayer = [[LabradorInnerPlayer alloc] initWithDescription:description provider:self] ;
 }

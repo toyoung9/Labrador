@@ -100,7 +100,7 @@ void Labrador_AudioQueueOutputCallback(void * __nullable       inUserData,
             memcpy(inBuffer->mAudioData + offset,
                    packet.data,
                    packet.byteSize) ;
-            memcpy(aspds + i, packet.packetDescriptions, sizeof(AudioStreamPacketDescription)) ;
+            memcpy(aspds + i, packet.packetDescription, sizeof(AudioStreamPacketDescription)) ;
             offset += packet.byteSize ;
         }
         inBuffer->mAudioDataByteSize = offset ;

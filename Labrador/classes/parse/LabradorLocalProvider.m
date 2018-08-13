@@ -21,6 +21,7 @@
     if (self) {
         NSString *path = [[NSBundle mainBundle] pathForResource:@"t" ofType:@"mp3"] ;
         _handle = [NSFileHandle fileHandleForReadingAtPath:path] ;
+        
     }
     return self;
 }

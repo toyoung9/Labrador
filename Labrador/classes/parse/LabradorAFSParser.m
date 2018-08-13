@@ -14,11 +14,17 @@
 {
     AudioFileStreamID _audioFileStreamID ;
     AudioStreamBasicDescription _audioStreamBasicDescription ;
+    
 }
 @property(nonatomic, weak)id<LabradorDataProvider> dataProvider ;
 @property(nonatomic, assign)UInt32 dataOffset ;
 @property(nonatomic, strong)NSMutableArray<LabradorAudioFrame *> *frames ;
 @property(nonatomic, assign)UInt32 frameByteSize ;
+@property(nonatomic, assign)float duration;
+@property(nonatomic, assign)SInt64 startOffset;
+@property(nonatomic, assign)UInt32 bitRate ;
+@property(nonatomic, assign)UInt64 totalByteSize ;
+
 
 - (void)parseForAudioStreamBasicDescription:(AudioStreamBasicDescription)description ;
 @end
@@ -28,14 +34,40 @@ void LabradorAFSParser_AudioFileStream_PropertyListenerProc(
                                              AudioFileStreamID                  inAudioFileStream,
                                              AudioFileStreamPropertyID          inPropertyID,
                                              AudioFileStreamPropertyFlags       *ioFlags){
+    LabradorAFSParser *SELF = (__bridge LabradorAFSParser *)inClientData ;
     if(inPropertyID == kAudioFileStreamProperty_DataFormat) {
-        LabradorAFSParser *_self_ = (__bridge LabradorAFSParser *)inClientData ;
+        NSLog(@"获得音频描述") ;
         AudioStreamBasicDescription asbd ;
         UInt32 size = sizeof(AudioStreamBasicDescription) ;
         AudioFileStreamGetProperty(inAudioFileStream, inPropertyID, &size, &asbd) ;
-        [_self_ parseForAudioStreamBasicDescription:asbd] ;
+        [SELF parseForAudioStreamBasicDescription:asbd] ;
     } else if(inPropertyID == kAudioFileStreamProperty_ReadyToProducePackets) {
+        SELF.duration = ceil(1.0f * (SELF.totalByteSize * 8) / SELF.bitRate) ;
+        NSLog(@"音频时长: %f", SELF.duration) ;
         NSLog(@"准备生产音频数据") ;
+    } else if(inPropertyID == kAudioFileStreamProperty_DataOffset) {
+        UInt32 size = sizeof(SInt64) ;
+        SInt64 offset = 0 ;
+        AudioFileStreamGetProperty(inAudioFileStream, kAudioFileStreamProperty_DataOffset, &size, &offset) ;
+        SELF.startOffset = offset ;
+        NSLog(@"音频数据起始位置: %lld", offset) ;
+    } else if(inPropertyID == kAudioFileStreamProperty_AudioDataByteCount) {
+        UInt32 size = sizeof(UInt64) ;
+        UInt64 total_byte_size = 0 ;
+        AudioFileStreamGetProperty(inAudioFileStream, kAudioFileStreamProperty_AudioDataByteCount, &size, &total_byte_size) ;
+        NSLog(@"音频数据总数: %lld", total_byte_size) ;
+        SELF.totalByteSize = total_byte_size ;
+    } else if(inPropertyID == kAudioFileStreamProperty_BitRate) {
+        UInt32 size = sizeof(UInt32) ;
+        UInt32 bitRate = 0 ;
+        AudioFileStreamGetProperty(inAudioFileStream, kAudioFileStreamProperty_BitRate, &size, &bitRate) ;
+        NSLog(@"比特率: %u", bitRate) ;
+        SELF.bitRate = bitRate ;
+    } else if(inPropertyID == kAudioFileStreamProperty_AudioDataPacketCount) {
+        UInt32 size = sizeof(UInt64) ;
+        UInt64 packetCount = 0 ;
+        AudioFileStreamGetProperty(inAudioFileStream, kAudioFileStreamProperty_AudioDataPacketCount, &size, &packetCount) ;
+        NSLog(@"音频包总数: %lld", packetCount) ;
     }
 }
 void LabradorAFSParser_AudioFileStream_PacketsProc(
@@ -96,7 +128,7 @@ void LabradorAFSParser_AudioFileStream_PacketsProc(
     _audioStreamBasicDescription = description ;
 }
 
-- (AudioStreamBasicDescription)parse {
+- (AudioStreamBasicDescription)getAudioStreamBasicDescription {
     return _audioStreamBasicDescription ;
 }
 
