@@ -7,7 +7,6 @@
 //
 
 #import "LabradorAudioPlayer.h"
-#import "LABCacheManager.h"
 #import "LabradorParse.h"
 #import "LabradorDataProvider.h"
 #import "LabradorAFSParser.h"
@@ -17,8 +16,6 @@
 
 @interface LabradorAudioPlayer()<LabradorInnerPlayerDataProvider>
 {
-    //store manager: download and store caching information
-    LABCacheManager *_storeManager ;
     id<LabradorParse> _parser ;
     id<LabradorDataProvider> _dataProvider ;
     LabradorInnerPlayer *_innerPlayer ;

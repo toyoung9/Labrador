@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C374405C2121CB1300F3F775 /* LabradorNetworkProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = C374405B2121CB1300F3F775 /* LabradorNetworkProvider.m */; };
+		C37440622121CCC000F3F775 /* NSString+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = C37440612121CCC000F3F775 /* NSString+Extensions.m */; };
+		C374406A2121CEAF00F3F775 /* LabradorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C37440692121CEAF00F3F775 /* LabradorTests.m */; };
+		C37440732121CED900F3F775 /* NSStringExtensionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C37440722121CED900F3F775 /* NSStringExtensionsTests.m */; };
+		C37440742121CEE500F3F775 /* NSString+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = C37440612121CCC000F3F775 /* NSString+Extensions.m */; };
 		C3820C45211AC60500EA0BD5 /* LabradorAFSParser.m in Sources */ = {isa = PBXBuildFile; fileRef = C3820C44211AC60500EA0BD5 /* LabradorAFSParser.m */; };
 		C3820C48211ACE9600EA0BD5 /* LabradorLocalProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = C3820C47211ACE9600EA0BD5 /* LabradorLocalProvider.m */; };
 		C3820C4B211ACED600EA0BD5 /* t.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C3820C4A211ACED600EA0BD5 /* t.mp3 */; };
@@ -19,14 +24,32 @@
 		C3C8670221189554000110A9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3C8670021189554000110A9 /* LaunchScreen.storyboard */; };
 		C3C8670521189554000110A9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C8670421189554000110A9 /* main.m */; };
 		C3C8670E21189637000110A9 /* LabradorAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C8670D21189637000110A9 /* LabradorAudioPlayer.m */; };
-		C3C867112118967E000110A9 /* LABCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C867102118967E000110A9 /* LABCache.m */; };
-		C3C8671421189695000110A9 /* LABDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C8671321189695000110A9 /* LABDownloader.m */; };
-		C3C86717211897CC000110A9 /* LABCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C86716211897CC000110A9 /* LABCacheManager.m */; };
+		C3C867112118967E000110A9 /* LabradorCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C867102118967E000110A9 /* LabradorCache.m */; };
+		C3C8671421189695000110A9 /* LabradorDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C8671321189695000110A9 /* LabradorDownloader.m */; };
 		C3D3222821217C680061A24E /* t2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C3D3222721217C680061A24E /* t2.mp3 */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		C374406C2121CEAF00F3F775 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C3C866EA21189551000110A9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C3C866F121189551000110A9;
+			remoteInfo = Labrador;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		C36043A621211B8A00EE1629 /* configure.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = configure.h; sourceTree = "<group>"; };
+		C374405A2121CB1300F3F775 /* LabradorNetworkProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LabradorNetworkProvider.h; sourceTree = "<group>"; };
+		C374405B2121CB1300F3F775 /* LabradorNetworkProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LabradorNetworkProvider.m; sourceTree = "<group>"; };
+		C37440602121CCC000F3F775 /* NSString+Extensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Extensions.h"; sourceTree = "<group>"; };
+		C37440612121CCC000F3F775 /* NSString+Extensions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extensions.m"; sourceTree = "<group>"; };
+		C37440672121CEAE00F3F775 /* LabradorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LabradorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C37440692121CEAF00F3F775 /* LabradorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LabradorTests.m; sourceTree = "<group>"; };
+		C374406B2121CEAF00F3F775 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C37440712121CED900F3F775 /* NSStringExtensionsTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSStringExtensionsTests.h; sourceTree = "<group>"; };
+		C37440722121CED900F3F775 /* NSStringExtensionsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSStringExtensionsTests.m; sourceTree = "<group>"; };
 		C3820C41211AC56B00EA0BD5 /* LabradorParse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LabradorParse.h; sourceTree = "<group>"; };
 		C3820C43211AC60500EA0BD5 /* LabradorAFSParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LabradorAFSParser.h; sourceTree = "<group>"; };
 		C3820C44211AC60500EA0BD5 /* LabradorAFSParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LabradorAFSParser.m; sourceTree = "<group>"; };
@@ -51,16 +74,21 @@
 		C3C8670421189554000110A9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C3C8670C21189637000110A9 /* LabradorAudioPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LabradorAudioPlayer.h; sourceTree = "<group>"; };
 		C3C8670D21189637000110A9 /* LabradorAudioPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LabradorAudioPlayer.m; sourceTree = "<group>"; };
-		C3C8670F2118967E000110A9 /* LABCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LABCache.h; sourceTree = "<group>"; };
-		C3C867102118967E000110A9 /* LABCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LABCache.m; sourceTree = "<group>"; };
-		C3C8671221189695000110A9 /* LABDownloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LABDownloader.h; sourceTree = "<group>"; };
-		C3C8671321189695000110A9 /* LABDownloader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LABDownloader.m; sourceTree = "<group>"; };
-		C3C86715211897CC000110A9 /* LABCacheManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LABCacheManager.h; sourceTree = "<group>"; };
-		C3C86716211897CC000110A9 /* LABCacheManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LABCacheManager.m; sourceTree = "<group>"; };
+		C3C8670F2118967E000110A9 /* LabradorCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LabradorCache.h; sourceTree = "<group>"; };
+		C3C867102118967E000110A9 /* LabradorCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LabradorCache.m; sourceTree = "<group>"; };
+		C3C8671221189695000110A9 /* LabradorDownloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LabradorDownloader.h; sourceTree = "<group>"; };
+		C3C8671321189695000110A9 /* LabradorDownloader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LabradorDownloader.m; sourceTree = "<group>"; };
 		C3D3222721217C680061A24E /* t2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = t2.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		C37440642121CEAE00F3F775 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C3C866EF21189551000110A9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -71,13 +99,55 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C374405D2121CB2900F3F775 /* network */ = {
+			isa = PBXGroup;
+			children = (
+				C3C8670F2118967E000110A9 /* LabradorCache.h */,
+				C3C867102118967E000110A9 /* LabradorCache.m */,
+				C3C8671221189695000110A9 /* LabradorDownloader.h */,
+				C3C8671321189695000110A9 /* LabradorDownloader.m */,
+				C374405A2121CB1300F3F775 /* LabradorNetworkProvider.h */,
+				C374405B2121CB1300F3F775 /* LabradorNetworkProvider.m */,
+			);
+			path = network;
+			sourceTree = "<group>";
+		};
+		C374405E2121CB5700F3F775 /* local */ = {
+			isa = PBXGroup;
+			children = (
+				C3820C46211ACE9600EA0BD5 /* LabradorLocalProvider.h */,
+				C3820C47211ACE9600EA0BD5 /* LabradorLocalProvider.m */,
+			);
+			path = local;
+			sourceTree = "<group>";
+		};
+		C374405F2121CBFE00F3F775 /* utilitys */ = {
+			isa = PBXGroup;
+			children = (
+				C37440602121CCC000F3F775 /* NSString+Extensions.h */,
+				C37440612121CCC000F3F775 /* NSString+Extensions.m */,
+			);
+			path = utilitys;
+			sourceTree = "<group>";
+		};
+		C37440682121CEAF00F3F775 /* LabradorTests */ = {
+			isa = PBXGroup;
+			children = (
+				C37440692121CEAF00F3F775 /* LabradorTests.m */,
+				C374406B2121CEAF00F3F775 /* Info.plist */,
+				C37440712121CED900F3F775 /* NSStringExtensionsTests.h */,
+				C37440722121CED900F3F775 /* NSStringExtensionsTests.m */,
+			);
+			path = LabradorTests;
+			sourceTree = "<group>";
+		};
 		C3820C42211AC5D500EA0BD5 /* parse */ = {
 			isa = PBXGroup;
 			children = (
+				C374405E2121CB5700F3F775 /* local */,
+				C374405D2121CB2900F3F775 /* network */,
 				C3820C43211AC60500EA0BD5 /* LabradorAFSParser.h */,
 				C3820C44211AC60500EA0BD5 /* LabradorAFSParser.m */,
-				C3820C46211ACE9600EA0BD5 /* LabradorLocalProvider.h */,
-				C3820C47211ACE9600EA0BD5 /* LabradorLocalProvider.m */,
 			);
 			path = parse;
 			sourceTree = "<group>";
@@ -100,7 +170,7 @@
 			path = protocol;
 			sourceTree = "<group>";
 		};
-		C3820C4F211AFD5E00EA0BD5 /* player */ = {
+		C3820C4F211AFD5E00EA0BD5 /* inner_player */ = {
 			isa = PBXGroup;
 			children = (
 				C3820C50211AFDFA00EA0BD5 /* LabradorInnerPlayer.h */,
@@ -108,13 +178,14 @@
 				C3820C53211B06CF00EA0BD5 /* LabradorAudioPacket.h */,
 				C3820C54211B06CF00EA0BD5 /* LabradorAudioPacket.m */,
 			);
-			path = player;
+			path = inner_player;
 			sourceTree = "<group>";
 		};
 		C3C866E921189551000110A9 = {
 			isa = PBXGroup;
 			children = (
 				C3C866F421189551000110A9 /* Labrador */,
+				C37440682121CEAF00F3F775 /* LabradorTests */,
 				C3C866F321189551000110A9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -123,6 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				C3C866F221189551000110A9 /* Labrador.app */,
+				C37440672121CEAE00F3F775 /* LabradorTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -148,17 +220,12 @@
 		C3C8670B21189580000110A9 /* classes */ = {
 			isa = PBXGroup;
 			children = (
-				C3820C4F211AFD5E00EA0BD5 /* player */,
+				C374405F2121CBFE00F3F775 /* utilitys */,
+				C3820C4F211AFD5E00EA0BD5 /* inner_player */,
 				C3820C4D211AFBB400EA0BD5 /* protocol */,
 				C3820C42211AC5D500EA0BD5 /* parse */,
 				C3C8670C21189637000110A9 /* LabradorAudioPlayer.h */,
 				C3C8670D21189637000110A9 /* LabradorAudioPlayer.m */,
-				C3C86715211897CC000110A9 /* LABCacheManager.h */,
-				C3C86716211897CC000110A9 /* LABCacheManager.m */,
-				C3C8670F2118967E000110A9 /* LABCache.h */,
-				C3C867102118967E000110A9 /* LABCache.m */,
-				C3C8671221189695000110A9 /* LABDownloader.h */,
-				C3C8671321189695000110A9 /* LABDownloader.m */,
 				C3820C4C211ACF3400EA0BD5 /* Labrador.h */,
 				C36043A621211B8A00EE1629 /* configure.h */,
 			);
@@ -168,6 +235,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		C37440662121CEAE00F3F775 /* LabradorTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C374406E2121CEAF00F3F775 /* Build configuration list for PBXNativeTarget "LabradorTests" */;
+			buildPhases = (
+				C37440632121CEAE00F3F775 /* Sources */,
+				C37440642121CEAE00F3F775 /* Frameworks */,
+				C37440652121CEAE00F3F775 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C374406D2121CEAF00F3F775 /* PBXTargetDependency */,
+			);
+			name = LabradorTests;
+			productName = LabradorTests;
+			productReference = C37440672121CEAE00F3F775 /* LabradorTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		C3C866F121189551000110A9 /* Labrador */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C3C8670821189554000110A9 /* Build configuration list for PBXNativeTarget "Labrador" */;
@@ -194,6 +279,10 @@
 				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = legendry;
 				TargetAttributes = {
+					C37440662121CEAE00F3F775 = {
+						CreatedOnToolsVersion = 10.0;
+						TestTargetID = C3C866F121189551000110A9;
+					};
 					C3C866F121189551000110A9 = {
 						CreatedOnToolsVersion = 10.0;
 					};
@@ -213,11 +302,19 @@
 			projectRoot = "";
 			targets = (
 				C3C866F121189551000110A9 /* Labrador */,
+				C37440662121CEAE00F3F775 /* LabradorTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		C37440652121CEAE00F3F775 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C3C866F021189551000110A9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -233,16 +330,27 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		C37440632121CEAE00F3F775 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C37440742121CEE500F3F775 /* NSString+Extensions.m in Sources */,
+				C374406A2121CEAF00F3F775 /* LabradorTests.m in Sources */,
+				C37440732121CED900F3F775 /* NSStringExtensionsTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C3C866EE21189551000110A9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				C3C866FA21189551000110A9 /* ViewController.m in Sources */,
-				C3C867112118967E000110A9 /* LABCache.m in Sources */,
+				C3C867112118967E000110A9 /* LabradorCache.m in Sources */,
 				C3C8670E21189637000110A9 /* LabradorAudioPlayer.m in Sources */,
-				C3C86717211897CC000110A9 /* LABCacheManager.m in Sources */,
+				C37440622121CCC000F3F775 /* NSString+Extensions.m in Sources */,
+				C374405C2121CB1300F3F775 /* LabradorNetworkProvider.m in Sources */,
 				C3C8670521189554000110A9 /* main.m in Sources */,
-				C3C8671421189695000110A9 /* LABDownloader.m in Sources */,
+				C3C8671421189695000110A9 /* LabradorDownloader.m in Sources */,
 				C3820C55211B06CF00EA0BD5 /* LabradorAudioPacket.m in Sources */,
 				C3820C52211AFDFA00EA0BD5 /* LabradorInnerPlayer.m in Sources */,
 				C3820C48211ACE9600EA0BD5 /* LabradorLocalProvider.m in Sources */,
@@ -252,6 +360,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C374406D2121CEAF00F3F775 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C3C866F121189551000110A9 /* Labrador */;
+			targetProxy = C374406C2121CEAF00F3F775 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		C3C866FB21189551000110A9 /* Main.storyboard */ = {
@@ -273,6 +389,42 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		C374406F2121CEAF00F3F775 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = LabradorTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.czqasn.Labrador.LabradorTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Labrador.app/Labrador";
+			};
+			name = Debug;
+		};
+		C37440702121CEAF00F3F775 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = LabradorTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.czqasn.Labrador.LabradorTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Labrador.app/Labrador";
+			};
+			name = Release;
+		};
 		C3C8670621189554000110A9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -420,6 +572,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C374406E2121CEAF00F3F775 /* Build configuration list for PBXNativeTarget "LabradorTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C374406F2121CEAF00F3F775 /* Debug */,
+				C37440702121CEAF00F3F775 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C3C866ED21189551000110A9 /* Build configuration list for PBXProject "Labrador" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

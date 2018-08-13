@@ -8,15 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
-struct LABCacheInformation {
+struct LabradorCacheInformation {
     char name[32];//MD5 name
     int length;//file length
     void *data;//data mapping(1byte -> 1024byte)
-}LABCacheInformation;
+};
+typedef struct LABCacheInformation LABCacheInformation;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface LABCache : NSObject
+@interface LabradorCache : NSObject
+
+- (instancetype)init NS_UNAVAILABLE ;
+- (instancetype)initWithURLString:(NSString * _Nonnull)urlString ;
 
 @end
 
