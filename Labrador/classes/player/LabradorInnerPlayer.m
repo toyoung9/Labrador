@@ -57,6 +57,7 @@ void Labrador_AudioQueueOutputCallback(void * __nullable       inUserData,
         _dataProvider = provider ;
         _playPort = [NSPort port] ;
         _playThread = [[NSThread alloc] initWithTarget:self selector:@selector(initializeAudioQueue) object:nil] ;
+        _playThread.name = @"Play & Decode" ;
         [_playThread start] ;
     }
     return self;
