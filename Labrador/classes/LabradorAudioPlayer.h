@@ -8,9 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface LabradorAudioPlayer : NSObject
+
+- (void)play ;
+- (void)pause ;
+- (void)resume ;
 
 @end
 

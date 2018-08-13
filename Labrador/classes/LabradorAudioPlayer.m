@@ -21,7 +21,7 @@
     LABCacheManager *_storeManager ;
     id<LabradorParse> _parser ;
     id<LabradorDataProvider> _dataProvider ;
-    LabradorInnerPlayer *_player ;
+    LabradorInnerPlayer *_innerPlayer ;
     
     dispatch_queue_t _produceQueue ;
     dispatch_queue_t _playQueue ;
@@ -49,11 +49,23 @@
 - (void)initializeInnerPlayer {
     AudioStreamBasicDescription description = _parser.parse ;
     NSAssert(description.mSampleRate > 0, @"LabradorParse initialize failure.") ;
-    _player = [[LabradorInnerPlayer alloc] initWithDescription:description provider:self] ;
+    _innerPlayer = [[LabradorInnerPlayer alloc] initWithDescription:description provider:self] ;
 }
 
 - (LabradorAudioFrame *)getNextFrame {
     LabradorAudioFrame *frame = [_parser product:LabradorAudioQueueBufferCacheSize] ;
     return frame ;//[[LabradorAudioFrame alloc] initWithPackets:tmps packetSize:byteSie] ;
 }
+
+#pragma mark - music control
+- (void)play{
+    [_innerPlayer play] ;
+}
+- (void)pause {
+    [_innerPlayer pause] ;
+}
+- (void)resume {
+    [_innerPlayer resume] ;
+}
+
 @end

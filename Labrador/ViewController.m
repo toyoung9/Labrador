@@ -20,10 +20,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor orangeColor] ;
+    _player = [[LabradorAudioPlayer alloc] init] ;
 }
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    _player = [[LabradorAudioPlayer alloc] init] ;
+
+- (IBAction)play:(id)sender {
+    [_player play] ;
+}
+- (IBAction)pause:(id)sender {
+    [_player pause] ;
+}
+- (IBAction)resume:(id)sender {
+    [_player resume] ;
 }
 
 @end

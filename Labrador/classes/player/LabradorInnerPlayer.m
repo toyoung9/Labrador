@@ -88,7 +88,6 @@ void Labrador_AudioQueueOutputCallback(void * __nullable       inUserData,
         CFArrayAppendValue(_buffers, buffer) ;
         [self enqueue:buffer] ;
     }
-    AudioQueueStart(_aqr, NULL) ;
 }
 
 - (void)enqueue:(AudioQueueBufferRef)inBuffer {
@@ -119,6 +118,17 @@ void Labrador_AudioQueueOutputCallback(void * __nullable       inUserData,
     } else {
         NSLog(@"未得到音频帧") ;
     }
+}
+
+#pragma mark - music control
+- (void)play{
+    AudioQueueStart(_aqr, NULL) ;
+}
+- (void)pause {
+    AudioQueuePause(_aqr) ;
+}
+- (void)resume {
+    AudioQueueStart(_aqr, NULL) ;
 }
 
 @end
