@@ -26,6 +26,9 @@
     NSString *cacheDir = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory,
                                                               NSUserDomainMask,
                                                               YES).firstObject stringByAppendingString:@"/labrador_cache"];
+    if(![[NSFileManager defaultManager] fileExistsAtPath:cacheDir]) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:cacheDir withIntermediateDirectories:YES attributes:NULL error:NULL] ;
+    }
     return cacheDir ;
 }
 

@@ -12,7 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol LabradorDownloaderDelegate <NSObject>
 
-- (void)downloadData:(NSData *)data ;
+- (void)receiveData:(NSData *)data start:(NSUInteger)start;
+- (void)completed;
 
 @end
 
@@ -21,8 +22,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak)id<LabradorDownloaderDelegate> delegate ;
 
 - (instancetype)init NS_UNAVAILABLE ;
-- (instancetype)initWithURLString:(NSString * _Nonnull)urlString ;
-
+- (instancetype)initWithURLString:(NSString * _Nonnull)urlString start:(NSUInteger)start length:(NSUInteger)length;
+- (void)start ;
+- (NSUInteger)startLocation;
+- (NSUInteger)length;
 
 @end
 

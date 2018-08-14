@@ -10,10 +10,11 @@
 
 struct LabradorCacheInformation {
     char name[32];//MD5 name
-    int length;//file length
-    void *data;//data mapping(1byte -> 1024byte)
+    UInt32 length;//file length
+    bool is_initialized;//
+    unsigned char *data;//data mapping(1byte -> 1024byte)
 };
-typedef struct LABCacheInformation LABCacheInformation;
+typedef struct LabradorCacheInformation LabradorCacheInformation;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,6 +22,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init NS_UNAVAILABLE ;
 - (instancetype)initWithURLString:(NSString * _Nonnull)urlString ;
+
+- (void)initializeLength:(NSUInteger)length ;
+- (void)completedFragment:(NSUInteger)start length:(NSUInteger)length;
+- (NSRange)findNextDownloadFragment;
+- (NSRange)findNextCacheFragmentFrom:(NSUInteger)from ;
+- (BOOL)isInitializedCache;
 
 @end
 

@@ -21,15 +21,20 @@
     if (self) {
         NSString *path = [[NSBundle mainBundle] pathForResource:@"t" ofType:@"mp3"] ;
         _handle = [NSFileHandle fileHandleForReadingAtPath:path] ;
-        
+        NSInteger fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:path error:NULL][NSFileSize] integerValue] ;
+        NSLog(@"File Size: %ld", fileSize) ;
     }
     return self;
 }
-- (uint32_t)getBytes:(void *)bytes size:(uint32_t)size offset:(uint32_t)offset{
+- (NSUInteger)getBytes:(void *)bytes size:(NSUInteger)size offset:(NSUInteger)offset{
     [_handle seekToFileOffset:offset] ;
     NSData *data = [_handle readDataOfLength:size] ;
     [data getBytes:bytes length:data.length] ;
     return (uint32_t)data.length ;
+}
+
+- (void)receiveContentLength:(NSUInteger)contentLength {
+    NSLog(@"Content Length: %ld", contentLength) ;
 }
 
 @end

@@ -45,6 +45,9 @@ void LabradorAFSParser_AudioFileStream_PropertyListenerProc(
         SELF.duration = ceil(1.0f * (SELF.totalByteSize * 8) / SELF.bitRate) ;
         NSLog(@"音频时长: %f", SELF.duration) ;
         NSLog(@"准备生产音频数据") ;
+        if(SELF.dataProvider) {
+            [SELF.dataProvider receiveContentLength:SELF.totalByteSize + SELF.startOffset] ;
+        }
     } else if(inPropertyID == kAudioFileStreamProperty_DataOffset) {
         UInt32 size = sizeof(SInt64) ;
         SInt64 offset = 0 ;

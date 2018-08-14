@@ -9,5 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @protocol LabradorDataProvider <NSObject>
-- (uint32_t)getBytes:(void *)bytes size:(uint32_t)size offset:(uint32_t)offset;
+- (NSUInteger)getBytes:(void *)bytes size:(NSUInteger)size offset:(NSUInteger)offset;
+- (void)receiveContentLength:(NSUInteger)contentLength;
 @end

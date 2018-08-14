@@ -25,6 +25,9 @@ typedef NS_ENUM(NSInteger,LabradorCache_Status){
 @interface LabradorNetworkProvider : NSObject<LabradorDataProvider>
 @property (nonatomic, assign)LabradorCache_Status cacheStatus ;
 @property (nonatomic, weak)id<LabradorNetworkProviderDelegate> delegate ;
+
+- (instancetype)init NS_UNAVAILABLE ;
+- (instancetype)initWithURLString:(NSString * _Nonnull)urlString ;
 @end
 
 NS_ASSUME_NONNULL_END
