@@ -85,12 +85,12 @@
         }
         [_dataReadHandle seekToFileOffset:0] ;
         NSData *data = [_dataReadHandle readDataOfLength:size] ;
-        [data getBytes:bytes range:NSMakeRange(offset, size)] ;
+        [data getBytes:bytes range:NSMakeRange(0, size)] ;
         length = data.length ;
     } else {
         //查找接下来连续缓存区是否满足最小设定
         NSRange range = [_cache findNextCacheFragmentFrom:_downloader.startLocation] ;
-        if(range.length < _cacheMinSize) {
+        if(range.length < _cacheMinSize && range.length > 0) {
             //不满足,则等待数据下载
             [_lock wait] ;
         }

@@ -19,7 +19,7 @@ typedef NS_ENUM(NSInteger, LabradorAudioPlayer_Status){
 };
 
 @protocol LabradorInnerPlayerDataProvider <NSObject>
-- (LabradorAudioFrame *)getNextFrame ;
+- (LabradorAudioFrame *)nextFrame ;
 @end
 @interface LabradorInnerPlayer : NSObject
 

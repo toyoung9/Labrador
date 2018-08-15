@@ -9,10 +9,19 @@
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioQueue.h>
 
+struct LabradorAudioInformation{
+    AudioStreamBasicDescription description ;
+    SInt64 dataOffset ;
+    UInt64 audioDataByteCount ;
+    UInt32 bitRate ;
+    UInt64 audioDataPacketCount ;
+    float duration ;
+};
+typedef struct LabradorAudioInformation LabradorAudioInformation;
+
 @class LabradorAudioFrame ;
 @protocol LabradorParse <NSObject>
-- (AudioStreamBasicDescription)getAudioStreamBasicDescription;
-- (LabradorAudioFrame *)product:(UInt32)minByteSize;
-- (float)duration;
+- (LabradorAudioInformation)audioInformation;
+- (LabradorAudioFrame *)product;
 @end
 

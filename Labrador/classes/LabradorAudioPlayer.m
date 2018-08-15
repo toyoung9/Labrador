@@ -37,18 +37,17 @@
 }
 
 - (void)initializeParser {
-    _dataProvider = [[LabradorNetworkProvider alloc] initWithURLString:@"http://audio01.dmhmusic.com/133_48_T10022565790_320_1_1_0_sdk-cpm/0105/M00/67/84/ChR45FmNKxKAMbUaAKtt4_FdDfk806.mp3?xcode=d6b108577011d5c930bca0dc489b75428d723ee"] ;
+    _dataProvider = [[LabradorNetworkProvider alloc] initWithURLString:@"http://audio01.dmhmusic.com/133_48_T10021342883_320_1_1_0_sdk-cpm/0104/M00/61/40/ChR45FmMkMCAHtDPAIv0vkFSMQk337.mp3?xcode=13d8cc1015ca581430bfa37cddf46355c50b6ec"] ;
     _parser = [[LabradorAFSParser alloc] init:_dataProvider] ;
 }
 - (void)initializeInnerPlayer {
-    AudioStreamBasicDescription description = [_parser getAudioStreamBasicDescription] ;
+    AudioStreamBasicDescription description = [_parser audioInformation].description ;
     NSAssert(description.mSampleRate > 0, @"LabradorParse initialize failure.") ;
     _innerPlayer = [[LabradorInnerPlayer alloc] initWithDescription:description provider:self] ;
 }
 
-- (LabradorAudioFrame *)getNextFrame {
-    LabradorAudioFrame *frame = [_parser product:LabradorAudioQueueBufferCacheSize] ;
-    return frame ;
+- (LabradorAudioFrame *)nextFrame {
+    return [_parser product]  ;
 }
 
 #pragma mark - music control

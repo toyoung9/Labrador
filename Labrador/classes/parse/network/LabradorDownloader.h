@@ -11,9 +11,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, DownloadType){
-    DownloadType_Header = 0,
-    DownloadType_AudioData = 1,
-    DownloadType_ContentLength = 2
+    DownloadType_Header = 1,
+    DownloadType_AudioData = 2,
 };
 
 @protocol LabradorDownloaderDelegate <NSObject>

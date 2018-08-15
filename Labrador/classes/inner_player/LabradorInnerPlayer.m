@@ -92,7 +92,7 @@ void Labrador_AudioQueueOutputCallback(void * __nullable       inUserData,
 }
 
 - (void)enqueue:(AudioQueueBufferRef)inBuffer {
-    LabradorAudioFrame *frame = [self.dataProvider getNextFrame] ;
+    LabradorAudioFrame *frame = [self.dataProvider nextFrame] ;
     if(frame) {
         UInt32 offset = 0 ;
         AudioStreamPacketDescription *aspds = (AudioStreamPacketDescription *)malloc(sizeof(AudioStreamPacketDescription) * frame.packets.count) ;
