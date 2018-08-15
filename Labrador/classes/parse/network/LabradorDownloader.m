@@ -19,6 +19,7 @@
     NSOperationQueue *_operationQueue ;
     NSUInteger _callBackDataLength ;
     NSMutableData *_data ;
+    DownloadType _downloadType ;
 }
 @end
 
@@ -26,11 +27,15 @@
 
 #pragma mark - initialize
 
-- (instancetype)initWithURLString:(NSString * _Nonnull)urlString start:(NSUInteger)start length:(NSUInteger)length
+- (instancetype)initWithURLString:(NSString * _Nonnull)urlString
+                            start:(NSUInteger)start
+                           length:(NSUInteger)length
+                     downloadType:(DownloadType)type
 {
     self = [super init];
     if (self) {
         _urlString = urlString ;
+        _downloadType = type ;
         _path = [_urlString cachePath] ;
         _start = start ;
         _length = length ;
@@ -48,6 +53,15 @@
 - (NSUInteger)length {
     return _length ;
 }
+- (DownloadType)downloadType {
+    return _downloadType ;
+}
+- (NSUInteger)downloadSize {
+    return _data.length ;
+}
+- (BOOL)downloadCompleted {
+    return _data.length == _length ;
+}
 
 #pragma mark -
 - (void)initializeURLSession {
@@ -59,8 +73,6 @@
 
 - (void)start{
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:_urlString]] ;
-//    [request setValue:@"" forHTTPHeaderField:@"Accept-Encoding"] ;
-//    request.HTTPMethod = @"GET" ;
     NSString *rangString = [NSString stringWithFormat:@"bytes=%ld-%ld", _start,(_start + _length - 1)] ;
     [request setValue:rangString forHTTPHeaderField:@"Range"] ;
     NSLog(@"==============================================================") ;
@@ -90,10 +102,10 @@ didReceiveResponse:(NSHTTPURLResponse *)response
     didReceiveData:(NSData *)data{
     if(!data || data.length == 0) return ;
     [_data appendData:data] ;
-    NSLog(@"接受到数据: %ld, %ld", _data.length, data.length) ;
+//    NSLog(@"接受到数据: %ld, %ld", _data.length, data.length) ;
     if(self.delegate && _data.length >= 1024) {
         NSUInteger tmpCallBackLength = (_data.length - _callBackDataLength) / 1024 * 1024 ;
-        NSLog(@"数据大于1024,回调数据:%ld-%ld",_callBackDataLength, tmpCallBackLength) ;
+//        NSLog(@"数据大于1024,回调数据:%ld-%ld",_callBackDataLength, tmpCallBackLength) ;
         [self.delegate receiveData:[_data subdataWithRange:NSMakeRange(_callBackDataLength, tmpCallBackLength)] start:_callBackDataLength] ;
         _callBackDataLength += tmpCallBackLength ;
     }
@@ -104,8 +116,7 @@ didCompleteWithError:(nullable NSError *)error {
     if(self.delegate) {
         [self.delegate receiveData:[_data subdataWithRange:NSMakeRange(_callBackDataLength, _data.length - _callBackDataLength)] start:_callBackDataLength] ;
         _callBackDataLength = _data.length ;
-        NSLog(@"数据接受完成:%ld-%ld", _start, _data.length) ;
-        [self.delegate completed] ;
+        [self.delegate completed:[self downloadCompleted]] ;
         NSLog(@"==============================================================") ;
     }
 }

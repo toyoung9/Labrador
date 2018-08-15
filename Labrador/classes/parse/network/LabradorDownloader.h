@@ -10,10 +10,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSInteger, DownloadType){
+    DownloadType_Header = 0,
+    DownloadType_AudioData = 1,
+    DownloadType_ContentLength = 2
+};
+
 @protocol LabradorDownloaderDelegate <NSObject>
 
 - (void)receiveData:(NSData *)data start:(NSUInteger)start;
-- (void)completed;
+- (void)completed:(BOOL)isDownloadFullData;
 
 @end
 
@@ -22,10 +28,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak)id<LabradorDownloaderDelegate> delegate ;
 
 - (instancetype)init NS_UNAVAILABLE ;
-- (instancetype)initWithURLString:(NSString * _Nonnull)urlString start:(NSUInteger)start length:(NSUInteger)length;
+- (instancetype)initWithURLString:(NSString * _Nonnull)urlString
+                            start:(NSUInteger)start
+                           length:(NSUInteger)length
+                     downloadType:(DownloadType)type;
 - (void)start ;
 - (NSUInteger)startLocation;
 - (NSUInteger)length;
+- (DownloadType)downloadType;
+- (NSUInteger)downloadSize;
+- (BOOL)downloadCompleted;
 
 @end
 

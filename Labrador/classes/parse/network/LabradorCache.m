@@ -63,13 +63,13 @@
 }
 - (void)initializeLength:(NSUInteger)length {
     if(!_cache.is_initialized){
-        NSLog(@"根据文件大小重新初始化") ;
         [[_cacheName dataUsingEncoding:NSUTF8StringEncoding] getBytes:_cache.name length:32];
-        _cache.length = length / 1024 ;
+        _cache.length = (UInt32)ceil(length * 1.0f / 1024) ;
         _cache.data = malloc(_cache.length) ;
         memset(_cache.data, 0, _cache.length) ;
         _cache.is_initialized = true ;
         [self synchronizeCacheInformation] ;
+        NSLog(@"根据文件大小重新初始化,映射大小: %u", _cache.length) ;
     } else {
         NSLog(@"不需要再次接受length配置") ;
     }
@@ -81,19 +81,19 @@
         [data appendBytes:_cache.data length:_cache.length] ;
         BOOL ret = [data writeToFile:_cachePath atomically:YES] ;
         if(ret) {
-            NSLog(@"同步音频文件到磁盘成功") ;
+//            NSLog(@"同步音频文件到磁盘成功") ;
         } else {
             NSLog(@"同步音频文件到磁盘失败") ;
         }
     }
 }
 - (void)completedFragment:(NSUInteger)start length:(NSUInteger)length {
-    if(start >= _cache.length || length == 0) return ;
+    if(start + length >= _cache.length * 1024 || length == 0) return ;
     size_t _s = start / 1024 ;
-    NSUInteger _l = length / 1024 ;
+    NSUInteger _l = ceil(length * 1.0f / 1024) ;
     memset(_cache.data + _s, 0xFF, _l) ;
     [self synchronizeCacheInformation] ;
-    NSLog(@"完成一个映射片段: %ld, %ld", start, length) ;
+//    NSLog(@"完成一个映射片段: %ld, %ld", _s, _l) ;
 }
 
 - (NSRange)findNextDownloadFragment {
@@ -101,20 +101,20 @@
     NSUInteger start = 0 ;
     NSUInteger length = 0 ;
     //find start location
-    while (*(_cache.data + start) == 0xFF) {
+    while (*(_cache.data + start) != 0x00) {
         start ++ ;
     }
     //find fragment length
     if(start < _cache.length) {
-        while (*(_cache.data + start + length) == 0x00) {
+        while (*(_cache.data + start + length) == 0x00 && start + length < _cache.length) {
             length ++ ;
         }
     }
-    return NSMakeRange(start, length) ;
+    return NSMakeRange(start * 1024, MIN(length, _cache.length) * 1024) ;
 }
 
 - (NSRange)findNextCacheFragmentFrom:(NSUInteger)from {
-    NSUInteger start = from ;
+    NSUInteger start = from / 1024 ;
     NSUInteger length = 0 ;
     //find fragment length
     if(start < _cache.length) {
@@ -122,7 +122,9 @@
             length ++ ;
         }
     }
-    return NSMakeRange(start, length) ;
+    return NSMakeRange(from, MIN(length, _cache.length) * 1024) ;
 }
+
+
 
 @end

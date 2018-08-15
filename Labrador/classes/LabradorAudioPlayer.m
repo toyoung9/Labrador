@@ -20,9 +20,7 @@
     id<LabradorParse> _parser ;
     id<LabradorDataProvider> _dataProvider ;
     LabradorInnerPlayer *_innerPlayer ;
-    
-    dispatch_queue_t _produceQueue ;
-    dispatch_queue_t _playQueue ;
+
 }
 @end
 @implementation LabradorAudioPlayer
@@ -31,9 +29,7 @@
 {
     self = [super init];
     if (self) {
-        _produceQueue = dispatch_queue_create("Audio Frame Product Queue", NULL) ;
-        _playQueue = dispatch_queue_create("Playe Queue", NULL) ;
-        
+
         [self initializeParser] ;
         [self initializeInnerPlayer] ;
     }
@@ -41,7 +37,7 @@
 }
 
 - (void)initializeParser {
-    _dataProvider = [[LabradorNetworkProvider alloc] initWithURLString:@"http://audio01.dmhmusic.com/114_95_T10038823662_128_1_1_0_sdk-cpm/0209/M00/10/CE/ChR461nwEPeAOvBqADnhADpvBvg660.mp3?xcode=c89031ed5bcbac9830ac03cbd89d63ccc574fc4"] ;
+    _dataProvider = [[LabradorNetworkProvider alloc] initWithURLString:@"http://audio01.dmhmusic.com/133_48_T10022565790_320_1_1_0_sdk-cpm/0105/M00/67/84/ChR45FmNKxKAMbUaAKtt4_FdDfk806.mp3?xcode=d6b108577011d5c930bca0dc489b75428d723ee"] ;
     _parser = [[LabradorAFSParser alloc] init:_dataProvider] ;
 }
 - (void)initializeInnerPlayer {
@@ -52,7 +48,7 @@
 
 - (LabradorAudioFrame *)getNextFrame {
     LabradorAudioFrame *frame = [_parser product:LabradorAudioQueueBufferCacheSize] ;
-    return frame ;//[[LabradorAudioFrame alloc] initWithPackets:tmps packetSize:byteSie] ;
+    return frame ;
 }
 
 #pragma mark - music control

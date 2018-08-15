@@ -10,5 +10,7 @@
 #define configure_h
 
 #define LabradorAudioQueueBufferCacheSize   1024 * 32
+#define LabradorAudioHeaderInputSize        1024 * 10
+
 
 #endif /* configure_h */

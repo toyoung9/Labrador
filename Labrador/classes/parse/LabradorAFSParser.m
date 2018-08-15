@@ -114,7 +114,7 @@ void LabradorAFSParser_AudioFileStream_PacketsProc(
             NSLog(@"Error: %d", status) ;
             return nil ;
         }
-        uint32_t byte_size = 1024 * 32 ;
+        uint32_t byte_size = LabradorAudioHeaderInputSize ;
         void *bytes = malloc(byte_size) ;
         uint32_t read_size = [provider getBytes:bytes size:byte_size offset:0] ;
         status = AudioFileStreamParseBytes(_audioFileStreamID, read_size, bytes, 0) ;
