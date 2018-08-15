@@ -15,35 +15,54 @@
 #import "configure.h"
 #import "LabradorNetworkProvider.h"
 
-@interface LabradorAudioPlayer()<LabradorInnerPlayerDataProvider>
+@interface LabradorAudioPlayer()<LabradorInnerPlayerDataProvider, LabradorNetworkProviderDelegate>
 {
     id<LabradorParse> _parser ;
     id<LabradorDataProvider> _dataProvider ;
     LabradorInnerPlayer *_innerPlayer ;
-
+    NSPort *_port ;
+    NSThread *_thread ;
+    NSRunLoop *_runloop ;
 }
 @end
 @implementation LabradorAudioPlayer
 
+- (void)dealloc
+{
+    [_runloop removePort:_port forMode:NSRunLoopCommonModes] ;
+    [_thread cancel] ;
+    
+}
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-
-        [self initializeParser] ;
-        [self initializeInnerPlayer] ;
+        [self initializeThread] ;
     }
     return self;
 }
 
-- (void)initializeParser {
-    _dataProvider = [[LabradorNetworkProvider alloc] initWithURLString:@"http://audio01.dmhmusic.com/133_48_T10021342883_320_1_1_0_sdk-cpm/0104/M00/61/40/ChR45FmMkMCAHtDPAIv0vkFSMQk337.mp3?xcode=13d8cc1015ca581430bfa37cddf46355c50b6ec"] ;
-    _parser = [[LabradorAFSParser alloc] init:_dataProvider] ;
+- (void)initializeThread {
+    _port = [NSPort port] ;
+    _thread = [[NSThread alloc] initWithTarget:self selector:@selector(initializeInThread) object:nil] ;
+    _thread.name = @"Play & Decode" ;
+    [_thread start] ;
 }
-- (void)initializeInnerPlayer {
-    AudioStreamBasicDescription description = [_parser audioInformation].description ;
-    NSAssert(description.mSampleRate > 0, @"LabradorParse initialize failure.") ;
-    _innerPlayer = [[LabradorInnerPlayer alloc] initWithDescription:description provider:self] ;
+
+- (void)initializeInThread {
+    _runloop = [NSRunLoop currentRunLoop] ;
+    [_runloop addPort:_port forMode:NSRunLoopCommonModes] ;
+    
+    [self initialize] ;
+
+    
+}
+
+- (void)initialize {
+    _dataProvider = [[LabradorNetworkProvider alloc] initWithURLString:@"http://audio01.dmhmusic.com/133_48_T10022565790_320_1_1_0_sdk-cpm/0105/M00/67/84/ChR45FmNKxKAMbUaAKtt4_FdDfk806.mp3?xcode=cb789e385bd2c36830c1ab0b8449598bf19cadf" delegate:self] ;
+    _innerPlayer = [[LabradorInnerPlayer alloc] initWithProvider:self] ;
+    _parser = [[LabradorAFSParser alloc] init:_dataProvider] ;
+    
 }
 
 - (LabradorAudioFrame *)nextFrame {
@@ -51,14 +70,52 @@
 }
 
 #pragma mark - music control
+
+- (void)prepare {
+    [_dataProvider prepare] ;
+}
 - (void)play{
-    [_innerPlayer play] ;
+    if(_cacheStatus == LabradorCache_Status_Prepared) {
+        [_innerPlayer play] ;
+        _status = LabradorAudioPlayer_Status_Playing ;
+    }
 }
 - (void)pause {
-    [_innerPlayer pause] ;
+    if(_status == LabradorAudioPlayer_Status_Playing) {
+        [_innerPlayer pause] ;
+        _status = LabradorAudioPlayer_Status_Pause ;
+    }
 }
 - (void)resume {
-    [_innerPlayer resume] ;
+    if(_status == LabradorAudioPlayer_Status_Pause) {
+        [_innerPlayer resume] ;
+        _status = LabradorAudioPlayer_Status_Playing ;
+    }
 }
 
+#pragma mark -
+
+- (void)cacheStatusChanged:(LabradorCache_Status)newCacheStatus {
+    _cacheStatus = newCacheStatus ;
+    switch (newCacheStatus) {
+        case LabradorCache_Status_Preparing:
+            NSLog(@"[Cache]正在准备中...") ;
+            break;
+        case LabradorCache_Status_Prepared:
+            NSLog(@"[Cache]准备完成...") ;
+            [_dataProvider start] ;
+            [_innerPlayer configureDescription:[_parser audioInformation].description] ;
+            if(_delegate) [_delegate labradorAudioPlayerPrepared:self] ;
+            break ;
+        case LabradorCache_Status_Loading:
+            NSLog(@"[Cache]正在加载数据...") ;
+            break ;
+        case LabradorCache_Status_Enough:
+            NSLog(@"[Cache]有足够的数据可以播放了...") ;
+            break ;
+    }
+}
+- (void)loadingPercent:(float)percent {
+//    NSLog(@"加载进度: %f", percent) ;
+}
 @end

@@ -28,6 +28,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSRange)findNextDownloadFragment;
 - (NSRange)findNextCacheFragmentFrom:(NSUInteger)from ;
 - (BOOL)isInitializedCache;
+- (BOOL)hasEnoughDataCompareToMinSize:(UInt32)minSize from:(UInt32)from ;
+- (float)cachePercent;
+
 @end
 
 NS_ASSUME_NONNULL_END

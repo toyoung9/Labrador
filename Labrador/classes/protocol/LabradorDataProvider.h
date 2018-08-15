@@ -11,4 +11,6 @@
 @protocol LabradorDataProvider <NSObject>
 - (NSUInteger)getBytes:(void *)bytes size:(NSUInteger)size offset:(NSUInteger)offset;
 - (void)receiveContentLength:(NSUInteger)contentLength;
+- (void)prepare ;
+- (void)start ;
 @end

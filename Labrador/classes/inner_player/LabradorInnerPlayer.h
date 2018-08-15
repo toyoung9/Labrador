@@ -12,21 +12,18 @@
 #import "LabradorDataProvider.h"
 
 
-typedef NS_ENUM(NSInteger, LabradorAudioPlayer_Status){
-    LabradorAudioPlayer_Status_Stop = 0,
-    LabradorAudioPlayer_Status_Playing = 1,
-    LabradorAudioPlayer_Status_Pause = 2,
-};
+
 
 @protocol LabradorInnerPlayerDataProvider <NSObject>
 - (LabradorAudioFrame *)nextFrame ;
 @end
-@interface LabradorInnerPlayer : NSObject
 
+@interface LabradorInnerPlayer : NSObject
 - (instancetype)init NS_UNAVAILABLE ;
-- (instancetype)initWithDescription:(AudioStreamBasicDescription)description
-                           provider:(id<LabradorInnerPlayerDataProvider>)provider;
+- (instancetype)initWithProvider:(id<LabradorInnerPlayerDataProvider>)provider;
+- (void)configureDescription:(AudioStreamBasicDescription)description;
 - (void)play ;
 - (void)pause ;
 - (void)resume ;
+- (BOOL)isPlaying ;
 @end

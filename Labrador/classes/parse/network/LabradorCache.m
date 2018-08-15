@@ -16,6 +16,7 @@
     NSString *_cachePath ;
     LabradorCacheInformation _cache;
     size_t _headerLength ;
+    UInt32 _cacheCount ;
 }
 @end
 
@@ -47,6 +48,7 @@
                     _cache.data = malloc(_cache.length) ;
                     [cacheData getBytes:_cache.data length:_cache.length] ;
                     NSLog(@"从文件初始化完成") ;
+                    [self initializeCacheCount] ;
                 }else{
                     _cache.is_initialized = false ;
                     NSLog(@"从文件初始未失败") ;
@@ -58,6 +60,14 @@
     }
     return self;
 }
+
+- (void)initializeCacheCount {
+    int index = 0 ;
+    while (index < _cache.length) {
+        if(*(_cache.data + index) == 0xFF) _cacheCount ++ ;
+        index ++ ;
+    }
+}
 - (BOOL)isInitializedCache {
     return _cache.is_initialized ;
 }
@@ -68,23 +78,19 @@
         _cache.data = malloc(_cache.length) ;
         memset(_cache.data, 0, _cache.length) ;
         _cache.is_initialized = true ;
-        [self synchronizeCacheInformation] ;
+        [self synchronize] ;
         NSLog(@"根据文件大小重新初始化,映射大小: %u", _cache.length) ;
+        _cacheCount = 0 ;
     } else {
         NSLog(@"不需要再次接受length配置") ;
     }
 }
-- (void)synchronizeCacheInformation{
+- (void)synchronize {
     if(_cache.is_initialized) {
         NSMutableData *data = [[NSMutableData alloc] initWithCapacity:_headerLength + _cache.length] ;
         [data appendBytes:&_cache length:_headerLength] ;
         [data appendBytes:_cache.data length:_cache.length] ;
-        BOOL ret = [data writeToFile:_cachePath atomically:YES] ;
-        if(ret) {
-//            NSLog(@"同步音频文件到磁盘成功") ;
-        } else {
-            NSLog(@"同步音频文件到磁盘失败") ;
-        }
+        [data writeToFile:_cachePath atomically:YES] ;
     }
 }
 - (void)completedFragment:(NSUInteger)start length:(NSUInteger)length {
@@ -92,8 +98,8 @@
     size_t _s = start / 1024 ;
     NSUInteger _l = ceil(length * 1.0f / 1024) ;
     memset(_cache.data + _s, 0xFF, _l) ;
-    [self synchronizeCacheInformation] ;
-//    NSLog(@"完成一个映射片段: %ld, %ld", _s, _l) ;
+    [self synchronize] ;
+    _cacheCount += _l ;
 }
 
 - (NSRange)findNextDownloadFragment {
@@ -125,6 +131,15 @@
     return NSMakeRange(from, MIN(length, _cache.length) * 1024) ;
 }
 
+- (BOOL)hasEnoughDataCompareToMinSize:(UInt32)minSize from:(UInt32)from {
+    NSRange range = [self findNextCacheFragmentFrom:from] ;
+    return range.length >= minSize ;
+}
+
+- (float)cachePercent {
+    if(_cache.length == 0) return 0 ;
+    return _cacheCount * 1.0 / _cache.length ;
+}
 
 
 @end

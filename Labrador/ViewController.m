@@ -11,7 +11,7 @@
 #import "LabradorCache.h"
 #import "LabradorNetworkProvider.h"
 
-@interface ViewController ()
+@interface ViewController () <LabradorAudioPlayerDelegate>
 {
     LabradorAudioPlayer *_player ;
     LabradorCache *_cache ;
@@ -25,6 +25,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor orangeColor] ;
     _player = [[LabradorAudioPlayer alloc] init] ;
+    _player.delegate = self ;
 //
 //    _cache = [[LabradorCache alloc] initWithURLString:@"zbdd.mp3"] ;
 //    [_cache initializeLength:1024 * 1024 * 3] ;
@@ -35,7 +36,7 @@
 
 
 - (IBAction)play:(id)sender {
-    [_player play] ;
+    [_player prepare] ;
 //    NSRange range = [_cache findNextDownloadFragment] ;
 //    NSLog(@"需要下载的片段: %@", NSStringFromRange(range)) ;
 //    [_cache completedFragment:range.location * 1024 length:range.length * 1024] ;
@@ -49,4 +50,9 @@
     [_player resume] ;
 }
 
+#pragma mark -
+- (void)labradorAudioPlayerPrepared:(LabradorAudioPlayer *)player {
+    NSLog(@"-------------labradorAudioPlayerPrepared") ;
+    [_player play] ;
+}
 @end

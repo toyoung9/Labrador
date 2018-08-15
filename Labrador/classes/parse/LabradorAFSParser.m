@@ -45,33 +45,32 @@ NS_INLINE void _GetAudioFileStreamPropertyValue(AudioFileStreamID sid, AudioFile
  float duration ;
  */
 NS_INLINE void _PrintLabradorAudioInformation(LabradorAudioInformation information){
-    NSLog(@"-------------------------------------------------------") ;
-    NSLog(@"--------------------音频文件信息-------------------------") ;
-    NSLog(@"-------------------------------------------------------") ;
+    NSLog(@"") ;
+    NSLog(@"*******************************************************") ;
+    NSLog(@"") ;
+    NSLog(@"-------------------- 音频文件信息 -----------------------") ;
     NSLog(@"时长: %f", information.duration) ;
     NSLog(@"比特率: %u", information.bitRate) ;
     NSLog(@"音频起始位置: %lld", information.dataOffset) ;
     NSLog(@"音频文件大小: %lld", information.audioDataByteCount + information.dataOffset) ;
     NSLog(@"音频包总数: %lld", information.audioDataPacketCount) ;
-    NSLog(@"-------------------------------------------------------") ;
-    NSLog(@"--------------------音频文件信息-结束---------------------") ;
-    NSLog(@"-------------------------------------------------------") ;
+    NSLog(@"") ;
+    NSLog(@"*******************************************************") ;
+    NSLog(@"") ;
 }
 
-NS_INLINE void _PropertyListenerProc(
-                                             void *                             inClientData,
-                                             AudioFileStreamID                  inAudioFileStream,
-                                             AudioFileStreamPropertyID          inPropertyID,
-                                             AudioFileStreamPropertyFlags       *ioFlags){
+NS_INLINE void _PropertyListenerProc(void *                             inClientData,
+                                     AudioFileStreamID                  inAudioFileStream,
+                                     AudioFileStreamPropertyID          inPropertyID,
+                                     AudioFileStreamPropertyFlags       *ioFlags){
     LabradorAFSParser *this = (__bridge LabradorAFSParser *)inClientData ;
     [this parseAudioFileStreamWithPropertyID:inPropertyID] ;
 }
-NS_INLINE void _PacketsProc(
-                                    void *                              inClientData,
-                                    UInt32                              inNumberBytes,
-                                    UInt32                              inNumberPackets,
-                                    const void *                        inInputData,
-                                    AudioStreamPacketDescription        *inPacketDescriptions){
+NS_INLINE void _PacketsProc(void *                              inClientData,
+                            UInt32                              inNumberBytes,
+                            UInt32                              inNumberPackets,
+                            const void *                        inInputData,
+                            AudioStreamPacketDescription        *inPacketDescriptions){
     NSLog(@"得到音频数据: %u, %u, %@", inNumberBytes, inNumberPackets, [NSThread currentThread]) ;
     LabradorAFSParser *this = (__bridge LabradorAFSParser *)inClientData ;
     [this parseAudioPacketWithInNumberBytes:inNumberBytes inNumberPackets:inNumberPackets inInputData:inInputData inPacketDescriptions:inPacketDescriptions] ;

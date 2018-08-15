@@ -14,12 +14,7 @@
 {
     AudioStreamBasicDescription _audioStreamBasicDescription ;
     AudioQueueRef _aqr;
-//    UInt32 _bufferByteSize;
     CFMutableArrayRef _buffers ;
-    dispatch_queue_t _playQueue ;
-    NSThread *_playThread ;
-    NSPort *_playPort ;
-    NSRunLoop *_playRunLoop ;
 }
 
 @property(nonatomic,weak)id<LabradorInnerPlayerDataProvider> dataProvider ;
@@ -40,32 +35,28 @@ void Labrador_AudioQueueOutputCallback(void * __nullable       inUserData,
 
 - (void)dealloc
 {
-    [_playRunLoop removePort:_playPort forMode:NSRunLoopCommonModes] ;
-    [_playThread cancel] ;
     for(int i = 0; i < CFArrayGetCount(_buffers); i ++) {
         AudioQueueFreeBuffer(_aqr, (AudioQueueBufferRef)CFArrayGetValueAtIndex(_buffers, i));
     }
     CFArrayRemoveAllValues(_buffers) ;
 }
-- (instancetype)initWithDescription:(AudioStreamBasicDescription)description
-                           provider:(id<LabradorInnerPlayerDataProvider>)provider
+- (instancetype)initWithProvider:(id<LabradorInnerPlayerDataProvider>)provider
 {
     self = [super init];
     if (self) {
-        _audioStreamBasicDescription = description ;
         _buffers = CFArrayCreateMutable(CFAllocatorGetDefault(), 0, NULL) ;
         _dataProvider = provider ;
-        _playPort = [NSPort port] ;
-        _playThread = [[NSThread alloc] initWithTarget:self selector:@selector(initializeAudioQueue) object:nil] ;
-        _playThread.name = @"Play & Decode" ;
-        [_playThread start] ;
+        
     }
     return self;
 }
 
+- (void)configureDescription:(AudioStreamBasicDescription)description {
+    _audioStreamBasicDescription = description ;
+    [self initializeAudioQueue] ;
+}
+
 - (void)initializeAudioQueue {
-    _playRunLoop = [NSRunLoop currentRunLoop] ;
-    [[NSRunLoop currentRunLoop] addPort:_playPort forMode:NSRunLoopCommonModes] ;
     OSStatus status = AudioQueueNewOutput(&_audioStreamBasicDescription,
                                           Labrador_AudioQueueOutputCallback,
                                           (__bridge void *)self,
