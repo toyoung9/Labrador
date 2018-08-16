@@ -12,5 +12,14 @@
 #define LabradorAudioQueueBufferCacheSize   1024 * 32
 #define LabradorAudioHeaderInputSize        1024 * 10
 
+typedef NS_ENUM(NSInteger, DownloadType){
+    DownloadTypeHeader = 1,
+    DownloadTypeAudioData = 2,
+};
+
+typedef NS_ENUM(NSInteger,LabradorCacheStatus){
+    LabradorCacheStatusLoading = 1, //downloading data
+    LabradorCacheStatusEnough,//enough cache data
+};
 
 #endif /* configure_h */

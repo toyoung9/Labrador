@@ -21,7 +21,7 @@
     id<LabradorDataProvider> _dataProvider ;
     LabradorInnerPlayer *_innerPlayer ;
     NSPort *_port ;
-    NSThread *_thread ;
+    NSThread *_decodeAndPlayThread ;
     NSRunLoop *_runloop ;
 }
 @end
@@ -30,40 +30,34 @@
 - (void)dealloc
 {
     [_runloop removePort:_port forMode:NSRunLoopCommonModes] ;
-    [_thread cancel] ;
-    
+    [_decodeAndPlayThread cancel] ;
 }
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        [self initializeThread] ;
+        //初始化音频播放器(基于Audio Queue)
+        _innerPlayer = [[LabradorInnerPlayer alloc] initWithProvider:self] ;
+        //初始化数据提供器(网络数据提供器)
+        _dataProvider = [[LabradorNetworkProvider alloc] initWithURLString:@"http://audio01.dmhmusic.com/133_48_T10022565790_320_1_1_0_sdk-cpm/0105/M00/67/84/ChR45FmNKxKAMbUaAKtt4_FdDfk806.mp3?xcode=49dee2eb907ec7d430d256945fae652e502f677" delegate:self] ;
+        
     }
     return self;
 }
 
-- (void)initializeThread {
-    _port = [NSPort port] ;
-    _thread = [[NSThread alloc] initWithTarget:self selector:@selector(initializeInThread) object:nil] ;
-    _thread.name = @"Play & Decode" ;
-    [_thread start] ;
-}
 
-- (void)initializeInThread {
+- (void)startDecodeAndPlay {
+    //注册一个空的NSPort,让线程保持
     _runloop = [NSRunLoop currentRunLoop] ;
     [_runloop addPort:_port forMode:NSRunLoopCommonModes] ;
-    
-    [self initialize] ;
-
-    
-}
-
-- (void)initialize {
-    _dataProvider = [[LabradorNetworkProvider alloc] initWithURLString:@"http://audio01.dmhmusic.com/133_48_T10022565790_320_1_1_0_sdk-cpm/0105/M00/67/84/ChR45FmNKxKAMbUaAKtt4_FdDfk806.mp3?xcode=cb789e385bd2c36830c1ab0b8449598bf19cadf" delegate:self] ;
-    _innerPlayer = [[LabradorInnerPlayer alloc] initWithProvider:self] ;
+    //初始化,并且开始读取音频头信息,解析音频元数据,为播放做准备
     _parser = [[LabradorAFSParser alloc] init:_dataProvider] ;
-    
+    _playStatus = LabradorAudioPlayerPlayStatusPrepared ;
+    NSLog(@"[Cache]准备完成...") ;
+    [_innerPlayer configureDescription:[_parser audioInformation].description] ;
+    if(_delegate) [_delegate labradorAudioPlayerPrepared:self] ;
 }
+
 
 - (LabradorAudioFrame *)nextFrame {
     return [_parser product]  ;
@@ -72,45 +66,42 @@
 #pragma mark - music control
 
 - (void)prepare {
-    [_dataProvider prepare] ;
+    //开始一个新的线程
+    NSLog(@"[Cache]正在准备中...") ;
+    _playStatus = LabradorAudioPlayerPlayStatusPreparing ;
+    _port = [NSPort port] ;
+    _decodeAndPlayThread = [[NSThread alloc] initWithTarget:self selector:@selector(startDecodeAndPlay) object:nil] ;
+    _decodeAndPlayThread.name = @"Play & Decode" ;
+    [_decodeAndPlayThread start] ;
 }
 - (void)play{
-    if(_cacheStatus == LabradorCache_Status_Prepared) {
+    if(_playStatus == LabradorAudioPlayerPlayStatusPrepared) {
         [_innerPlayer play] ;
-        _status = LabradorAudioPlayer_Status_Playing ;
+        _playStatus = LabradorAudioPlayerPlayStatusPlaying ;
     }
 }
 - (void)pause {
-    if(_status == LabradorAudioPlayer_Status_Playing) {
+    if(_playStatus == LabradorAudioPlayerPlayStatusPlaying) {
         [_innerPlayer pause] ;
-        _status = LabradorAudioPlayer_Status_Pause ;
+        _playStatus = LabradorAudioPlayerPlayStatusPause ;
     }
 }
 - (void)resume {
-    if(_status == LabradorAudioPlayer_Status_Pause) {
+    if(_playStatus == LabradorAudioPlayerPlayStatusPause) {
         [_innerPlayer resume] ;
-        _status = LabradorAudioPlayer_Status_Playing ;
+        _playStatus = LabradorAudioPlayerPlayStatusPlaying ;
     }
 }
 
 #pragma mark -
 
-- (void)cacheStatusChanged:(LabradorCache_Status)newCacheStatus {
-    _cacheStatus = newCacheStatus ;
+- (void)cacheStatusChanged:(LabradorCacheStatus)newCacheStatus {
+    _loadingStatus = newCacheStatus ;
     switch (newCacheStatus) {
-        case LabradorCache_Status_Preparing:
-            NSLog(@"[Cache]正在准备中...") ;
-            break;
-        case LabradorCache_Status_Prepared:
-            NSLog(@"[Cache]准备完成...") ;
-            [_dataProvider start] ;
-            [_innerPlayer configureDescription:[_parser audioInformation].description] ;
-            if(_delegate) [_delegate labradorAudioPlayerPrepared:self] ;
-            break ;
-        case LabradorCache_Status_Loading:
+        case LabradorCacheStatusLoading:
             NSLog(@"[Cache]正在加载数据...") ;
             break ;
-        case LabradorCache_Status_Enough:
+        case LabradorCacheStatusEnough:
             NSLog(@"[Cache]有足够的数据可以播放了...") ;
             break ;
     }

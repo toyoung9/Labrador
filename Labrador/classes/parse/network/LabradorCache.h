@@ -19,18 +19,15 @@ typedef struct LabradorCacheInformation LabradorCacheInformation;
 NS_ASSUME_NONNULL_BEGIN
 
 @interface LabradorCache : NSObject
-
 - (instancetype)init NS_UNAVAILABLE ;
 - (instancetype)initWithURLString:(NSString * _Nonnull)urlString ;
-
 - (void)initializeLength:(NSUInteger)length ;
 - (void)completedFragment:(NSUInteger)start length:(NSUInteger)length;
 - (NSRange)findNextDownloadFragment;
 - (NSRange)findNextCacheFragmentFrom:(NSUInteger)from ;
 - (BOOL)isInitializedCache;
-- (BOOL)hasEnoughDataCompareToMinSize:(UInt32)minSize from:(UInt32)from ;
+- (BOOL)hasEnoughData:(UInt32)minSize from:(UInt32)from ;
 - (float)cachePercent;
-
 @end
 
 NS_ASSUME_NONNULL_END

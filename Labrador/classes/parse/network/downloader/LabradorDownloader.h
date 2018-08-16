@@ -7,13 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "configure.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSInteger, DownloadType){
-    DownloadType_Header = 1,
-    DownloadType_AudioData = 2,
-};
+
 
 @protocol LabradorDownloaderDelegate <NSObject>
 

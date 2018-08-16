@@ -131,7 +131,7 @@
     return NSMakeRange(from, MIN(length, _cache.length) * 1024) ;
 }
 
-- (BOOL)hasEnoughDataCompareToMinSize:(UInt32)minSize from:(UInt32)from {
+- (BOOL)hasEnoughData:(UInt32)minSize from:(UInt32)from {
     NSRange range = [self findNextCacheFragmentFrom:from] ;
     return range.length >= minSize ;
 }

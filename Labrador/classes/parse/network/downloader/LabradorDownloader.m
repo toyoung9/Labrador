@@ -41,7 +41,6 @@
         _length = length ;
         _callBackDataLength = 0 ;
         _data = [[NSMutableData alloc] init] ;
-        NSLog(@"准备开始下载: %@", [_urlString cachePath]) ;
         [self initializeURLSession] ;
     }
     return self;
@@ -78,7 +77,6 @@
     NSLog(@"==============================================================") ;
     NSLog(@"即将下载的范围: %@", rangString) ;
     NSURLSessionDataTask *task = [_session dataTaskWithRequest:request] ;
-    NSLog(@"%@", task) ;
     [task resume] ;
 }
 
@@ -90,11 +88,6 @@ didReceiveResponse:(NSHTTPURLResponse *)response
  completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
     NSLog(@"didReceiveResponse completionHandler: %@", response.allHeaderFields) ;
     completionHandler(NSURLSessionResponseAllow) ;
-    
-//    if(self.delegate && _start == 0) {
-//        NSLog(@"ContentLength: %lld", [response expectedContentLength]) ;
-//        [self.delegate receiveContentLength:[response expectedContentLength]] ;
-//    }
 }
 
 
@@ -102,10 +95,8 @@ didReceiveResponse:(NSHTTPURLResponse *)response
     didReceiveData:(NSData *)data{
     if(!data || data.length == 0) return ;
     [_data appendData:data] ;
-//    NSLog(@"接受到数据: %ld, %ld", _data.length, data.length) ;
     if(self.delegate && _data.length >= 1024) {
         NSUInteger tmpCallBackLength = (_data.length - _callBackDataLength) / 1024 * 1024 ;
-//        NSLog(@"数据大于1024,回调数据:%ld-%ld",_callBackDataLength, tmpCallBackLength) ;
         [self.delegate receiveData:[_data subdataWithRange:NSMakeRange(_callBackDataLength, tmpCallBackLength)] start:_callBackDataLength] ;
         _callBackDataLength += tmpCallBackLength ;
     }

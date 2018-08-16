@@ -46,7 +46,6 @@ void Labrador_AudioQueueOutputCallback(void * __nullable       inUserData,
     if (self) {
         _buffers = CFArrayCreateMutable(CFAllocatorGetDefault(), 0, NULL) ;
         _dataProvider = provider ;
-        
     }
     return self;
 }

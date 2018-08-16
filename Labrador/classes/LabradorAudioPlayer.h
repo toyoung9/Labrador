@@ -7,14 +7,21 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "configure.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSInteger, LabradorAudioPlayer_Status){
-    LabradorAudioPlayer_Status_Stop,
-    LabradorAudioPlayer_Status_Playing,
-    LabradorAudioPlayer_Status_Pause,
+typedef NS_ENUM(NSInteger, LabradorAudioPlayerPlayStatus){
+    //stop
+    LabradorAudioPlayerPlayStatusStop = 1,
+    //playing
+    LabradorAudioPlayerPlayStatusPlaying,
+    //pause
+    LabradorAudioPlayerPlayStatusPause,
+    //preparing for play
+    LabradorAudioPlayerPlayStatusPreparing,
+    //ready for play
+    LabradorAudioPlayerPlayStatusPrepared,
 };
 
 @class LabradorAudioPlayer ;
@@ -24,8 +31,9 @@ typedef NS_ENUM(NSInteger, LabradorAudioPlayer_Status){
 
 @interface LabradorAudioPlayer : NSObject
 @property (nonatomic, weak)id<LabradorAudioPlayerDelegate> delegate ;
-@property (nonatomic, assign)LabradorAudioPlayer_Status status ;
-@property (nonatomic, assign)NSInteger cacheStatus ;
+@property (nonatomic, assign)LabradorAudioPlayerPlayStatus playStatus ;
+@property (nonatomic, assign)LabradorCacheStatus loadingStatus ;
+
 - (void)prepare;
 - (void)play ;
 - (void)pause ;

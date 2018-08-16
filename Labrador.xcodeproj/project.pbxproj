@@ -102,10 +102,9 @@
 		C374405D2121CB2900F3F775 /* network */ = {
 			isa = PBXGroup;
 			children = (
+				C38D8DA52125496E0047F8E6 /* downloader */,
 				C3C8670F2118967E000110A9 /* LabradorCache.h */,
 				C3C867102118967E000110A9 /* LabradorCache.m */,
-				C3C8671221189695000110A9 /* LabradorDownloader.h */,
-				C3C8671321189695000110A9 /* LabradorDownloader.m */,
 				C374405A2121CB1300F3F775 /* LabradorNetworkProvider.h */,
 				C374405B2121CB1300F3F775 /* LabradorNetworkProvider.m */,
 			);
@@ -179,6 +178,15 @@
 				C3820C54211B06CF00EA0BD5 /* LabradorAudioPacket.m */,
 			);
 			path = inner_player;
+			sourceTree = "<group>";
+		};
+		C38D8DA52125496E0047F8E6 /* downloader */ = {
+			isa = PBXGroup;
+			children = (
+				C3C8671221189695000110A9 /* LabradorDownloader.h */,
+				C3C8671321189695000110A9 /* LabradorDownloader.m */,
+			);
+			path = downloader;
 			sourceTree = "<group>";
 		};
 		C3C866E921189551000110A9 = {

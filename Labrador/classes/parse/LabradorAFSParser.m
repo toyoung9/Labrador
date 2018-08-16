@@ -88,6 +88,7 @@ NS_INLINE void _PacketsProc(void *                              inClientData,
         self.dataProvider = provider ;
         self.dataOffset = 0 ;
         self.frames = [[NSMutableArray<LabradorAudioFrame *> alloc] initWithCapacity:10] ;
+        //初始化AudioFileStream
         OSStatus status = AudioFileStreamOpen((__bridge void *)self,
                                               _PropertyListenerProc,
                                               _PacketsProc,
@@ -99,7 +100,8 @@ NS_INLINE void _PacketsProc(void *                              inClientData,
         }
         uint32_t byte_size = LabradorAudioHeaderInputSize ;
         void *bytes = malloc(byte_size) ;
-        NSUInteger read_size = [provider getBytes:bytes size:byte_size offset:0] ;
+        //从数据提供器中读取指定的字节来解析头信息
+        NSUInteger read_size = [provider getBytes:bytes size:byte_size offset:0 type:DownloadTypeHeader] ;
         status = AudioFileStreamParseBytes(_audioFileStreamID, (UInt32)read_size, bytes, 0) ;
         free(bytes) ;
         self.dataOffset += (UInt32)read_size ;
@@ -118,6 +120,7 @@ NS_INLINE void _PacketsProc(void *                              inClientData,
             break;
         case kAudioFileStreamProperty_ReadyToProducePackets:
         {
+            //音频播放器需要的数据信息已经准备完成
             _audioInformation.duration = _audioInformation.audioDataByteCount * 8 / _audioInformation.bitRate ;
             if(self.dataProvider) {
                 [self.dataProvider receiveContentLength:_audioInformation.audioDataByteCount + _audioInformation.dataOffset] ;
@@ -162,7 +165,7 @@ NS_INLINE void _PacketsProc(void *                              inClientData,
     if (self.frames.count <= 0) {
         NSUInteger byte_size = LabradorAudioQueueBufferCacheSize  ;
         void *bytes = malloc(byte_size) ;
-        NSUInteger size = [_dataProvider getBytes:bytes size:byte_size offset:self.dataOffset] ;
+        NSUInteger size = [_dataProvider getBytes:bytes size:byte_size offset:self.dataOffset type:DownloadTypeAudioData] ;
         AudioFileStreamParseBytes(_audioFileStreamID, (UInt32)size, bytes, 0) ;
         self.dataOffset += (UInt32)size ;
         free(bytes) ;

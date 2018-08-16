@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "configure.h"
+
 
 @protocol LabradorDataProvider <NSObject>
-- (NSUInteger)getBytes:(void *)bytes size:(NSUInteger)size offset:(NSUInteger)offset;
+- (NSUInteger)getBytes:(void *)bytes size:(NSUInteger)size offset:(NSUInteger)offset type:(DownloadType)type;
 - (void)receiveContentLength:(NSUInteger)contentLength;
-- (void)prepare ;
-- (void)start ;
 @end
