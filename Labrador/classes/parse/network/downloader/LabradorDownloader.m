@@ -97,7 +97,7 @@ didReceiveResponse:(NSHTTPURLResponse *)response
     [_data appendData:data] ;
     if(self.delegate && _data.length >= 1024) {
         NSUInteger tmpCallBackLength = (_data.length - _callBackDataLength) / 1024 * 1024 ;
-        [self.delegate receiveData:[_data subdataWithRange:NSMakeRange(_callBackDataLength, tmpCallBackLength)] start:_callBackDataLength] ;
+        [self.delegate receiveData:[_data subdataWithRange:NSMakeRange(_callBackDataLength, tmpCallBackLength)] start:_callBackDataLength + _start] ;
         _callBackDataLength += tmpCallBackLength ;
     }
 }
@@ -105,7 +105,7 @@ didReceiveResponse:(NSHTTPURLResponse *)response
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
 didCompleteWithError:(nullable NSError *)error {
     if(self.delegate) {
-        [self.delegate receiveData:[_data subdataWithRange:NSMakeRange(_callBackDataLength, _data.length - _callBackDataLength)] start:_callBackDataLength] ;
+        [self.delegate receiveData:[_data subdataWithRange:NSMakeRange(_callBackDataLength, _data.length - _callBackDataLength)] start:_callBackDataLength + _start] ;
         _callBackDataLength = _data.length ;
         [self.delegate completed:[self downloadCompleted]] ;
         NSLog(@"==============================================================") ;

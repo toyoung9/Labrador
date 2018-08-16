@@ -39,7 +39,7 @@
         //初始化音频播放器(基于Audio Queue)
         _innerPlayer = [[LabradorInnerPlayer alloc] initWithProvider:self] ;
         //初始化数据提供器(网络数据提供器)
-        _dataProvider = [[LabradorNetworkProvider alloc] initWithURLString:@"http://audio01.dmhmusic.com/133_48_T10022565790_320_1_1_0_sdk-cpm/0105/M00/67/84/ChR45FmNKxKAMbUaAKtt4_FdDfk806.mp3?xcode=49dee2eb907ec7d430d256945fae652e502f677" delegate:self] ;
+        _dataProvider = [[LabradorNetworkProvider alloc] initWithURLString:@"http://audio01.dmhmusic.com/133_48_T10022565790_320_1_1_0_sdk-cpm/0105/M00/67/84/ChR45FmNKxKAMbUaAKtt4_FdDfk806.mp3?xcode=bbf2b2c4511398b230d8c6d1e798ad0ca5fefcc" delegate:self] ;
         
     }
     return self;

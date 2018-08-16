@@ -81,13 +81,10 @@
 //start new fragment download
 - (void)startNextFragmentDownload {
     NSRange range = [_cache findNextDownloadFragment] ;
-    if(range.length >= _minSize * 4) {
-        range.length = _minSize * 4 ;
-    }
     if(range.length == 0) return ;
     _downloader = [[LabradorDownloader alloc] initWithURLString:_urlString
                                                           start:range.location
-                                                         length:range.length
+                                                         length:MIN(range.length, _minSize * 4)
                                                    downloadType:DownloadTypeAudioData] ;
     _downloader.delegate = self ;
     [_downloader start] ;
