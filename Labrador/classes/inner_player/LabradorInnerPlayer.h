@@ -25,5 +25,6 @@
 - (void)play ;
 - (void)pause ;
 - (void)resume ;
-- (BOOL)isPlaying ;
+- (float)playTime ;
+- (void)cleanPlayData ;
 @end

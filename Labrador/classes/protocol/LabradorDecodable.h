@@ -15,5 +15,6 @@
 @protocol LabradorDecodable <NSObject>
 - (LabradorAudioInformation)audioInformation;
 - (LabradorAudioFrame *)product;
+- (void)seek:(UInt32)seek ;
 @end
 

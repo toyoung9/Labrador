@@ -40,12 +40,25 @@
     [_player resume] ;
 }
 
+- (void)sliderValueChanged:(UISlider *)slider {
+    [_player seek:slider.value] ;
+}
+
 #pragma mark -
 - (void)labradorAudioPlayerPrepared:(LabradorAudioPlayer *)player {
     NSLog(@"-------------labradorAudioPlayerPrepared") ;
+    _slider.minimumValue = 0 ;
+    _slider.maximumValue = player.duration ;
     [_player play] ;
 }
 - (void)labradorAudioPlayerWithError:(NSError *)error player:(LabradorAudioPlayer *)player {
     NSLog(@"发生错误: %@", error) ;
 }
+- (void)labradorAudioPlayerPlaying:(LabradorAudioPlayer *)player playTime:(float)playTime {
+//    NSLog(@"播放时间: %f", playTime) ;
+}
+- (void)labradorAudioPlayerCachingPercent:(LabradorAudioPlayer *)player percent:(float)percent {
+    NSLog(@"缓存百分比: %f", percent) ;
+}
+
 @end

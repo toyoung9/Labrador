@@ -84,7 +84,8 @@
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
 didReceiveResponse:(NSHTTPURLResponse *)response
  completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
-    if(response.statusCode != 200) {
+    if(response.statusCode != 200 &&
+       response.statusCode != 206) {
         if(self.delegate && [self.delegate respondsToSelector:@selector(onError:)]) {
             [self.delegate onError:[NSError errorWithDomain:NSURLErrorDomain code:response.statusCode userInfo:@{@"Reason": [NSString stringWithFormat:@"URL Response error: %ld", response.statusCode]}]] ;
         }

@@ -15,10 +15,12 @@
     AudioStreamBasicDescription _audioStreamBasicDescription ;
     AudioQueueRef _aqr;
     CFMutableArrayRef _buffers ;
+    
+   
 }
 
-@property(nonatomic,weak)id<LabradorInnerPlayerDataProvider> dataProvider ;
-
+@property (nonatomic, weak)id<LabradorInnerPlayerDataProvider> dataProvider ;
+@property (nonatomic, assign,getter=isReset) BOOL reset ;
 - (void)enqueue:(AudioQueueBufferRef)inBuffer;
 @end
 
@@ -26,9 +28,8 @@
 void Labrador_AudioQueueOutputCallback(void * __nullable       inUserData,
                                        AudioQueueRef           inAQ,
                                        AudioQueueBufferRef     inBuffer){
-    NSLog(@"回收音频缓存数据") ;
     LabradorInnerPlayer *this = (__bridge LabradorInnerPlayer *)inUserData ;
-    [this enqueue:inBuffer] ;
+    if(!this.isReset) [this enqueue:inBuffer] ;
 }
 
 @implementation LabradorInnerPlayer
@@ -46,6 +47,7 @@ void Labrador_AudioQueueOutputCallback(void * __nullable       inUserData,
     if (self) {
         _buffers = CFArrayCreateMutable(CFAllocatorGetDefault(), 0, NULL) ;
         _dataProvider = provider ;
+        self.reset = false ;
     }
     return self;
 }
@@ -104,14 +106,11 @@ void Labrador_AudioQueueOutputCallback(void * __nullable       inUserData,
             NSLog(@"AudioQueueEnqueueBuffer error: %d", (int)status) ;
         }
         free(aspds) ;
-        NSLog(@"入队列: %u", offset) ;
-        NSLog(@"------------------------------------------------------------------") ;
-    } else {
-        NSLog(@"未得到音频帧") ;
+       
     }
 }
 
-#pragma mark - music control
+#pragma mark - Music Control
 - (void)play{
     AudioQueueStart(_aqr, NULL) ;
 }
@@ -121,5 +120,18 @@ void Labrador_AudioQueueOutputCallback(void * __nullable       inUserData,
 - (void)resume {
     AudioQueueStart(_aqr, NULL) ;
 }
-
+- (void)cleanPlayData {
+    self.reset = YES ;
+    AudioQueueStop(_aqr, YES) ;
+    AudioQueueStart(_aqr, 0) ;
+//    for(int i = 0; i < 3; i ++) {
+//        [self enqueue:(AudioQueueBufferRef)CFArrayGetValueAtIndex(self->_buffers, i)] ;
+//    }
+}
+#pragma mark - Property
+- (float)playTime {
+    AudioTimeStamp stamp;
+    AudioQueueGetCurrentTime(_aqr, NULL, &stamp, NULL);
+    return stamp.mSampleTime / _audioStreamBasicDescription.mSampleRate ;
+}
 @end

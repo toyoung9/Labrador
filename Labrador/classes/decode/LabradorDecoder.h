@@ -17,5 +17,5 @@
 
 - (instancetype)init NS_UNAVAILABLE ;;
 - (instancetype)init:(id<LabradorDecoderDelegate>)delegate ;
-
+- (void)seek:(UInt32)offset ;
 @end

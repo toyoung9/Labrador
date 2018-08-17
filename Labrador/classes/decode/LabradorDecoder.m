@@ -163,6 +163,7 @@ NS_INLINE void _PacketsProc(void *                              inClientData,
     if (self.frames.count <= 0) {
         NSUInteger byte_size = LabradorAudioQueueBufferCacheSize  ;
         void *bytes = malloc(byte_size) ;
+        NSLog(@"读取数据: %u", (unsigned int)self.dataOffset) ;
         NSUInteger size = [self.delegate getBytes:bytes size:byte_size offset:self.dataOffset type:DownloadTypeAudioData] ;
         AudioFileStreamParseBytes(_audioFileStreamID, (UInt32)size, bytes, 0) ;
         self.dataOffset += (UInt32)size ;
@@ -174,6 +175,10 @@ NS_INLINE void _PacketsProc(void *                              inClientData,
         self.frameByteSize -= frame.byteSize ;
     }
     return frame ;
+}
+
+- (void)seek:(UInt32)offset {
+    self.dataOffset = offset ;
 }
 
 - (LabradorAudioInformation)audioInformation {

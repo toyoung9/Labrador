@@ -14,7 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @protocol LabradorNetworkProviderDelegate <NSObject>
-
 - (void)statusChanged:(LabradorCacheMappingStatus)newStatus ;
 - (void)loadingPercent:(float)percent ;
 - (void)onError:(NSError *)error ;

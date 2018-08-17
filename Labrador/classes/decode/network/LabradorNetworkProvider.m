@@ -48,7 +48,6 @@
     }
     return self;
 }
-
 - (void)initializeFileHandle {
     NSString *path = [_urlString cachePath] ;
     if(![[NSFileManager defaultManager] fileExistsAtPath:path]) {
@@ -57,7 +56,6 @@
     _fileWriteHandle = [NSFileHandle fileHandleForWritingAtPath:path] ;
     _fileReadHandle = [NSFileHandle fileHandleForReadingAtPath:path] ;
 }
-
 #pragma mark - Download Control
 - (void)startNextFragmentDownload {
     NSRange range = [_cache findNextDownloadFragment] ;
@@ -69,7 +67,6 @@
     _downloader.delegate = self ;
     [_downloader start] ;
 }
-
 #pragma mark - LabradorDataProvider Delegate
 - (NSUInteger)getBytes:(void *)bytes
                   size:(NSUInteger)size
@@ -110,16 +107,14 @@
     [_lock unlock] ;
     return length ;
 }
-
-
 - (void)prepared:(LabradorAudioInformation)information{
     if(_downloader.downloadType == DownloadTypeHeader) {
         _downloader = nil ;
         [_cache configureCacheMappingWithFileSize:information.totalSize] ;
-        [self startNextFragmentDownload] ;
     }
+    [self notifyPercent] ;
+    [self startNextFragmentDownload] ;
 }
-
 #pragma mark - Downloader Delegate
 //receive from current downloader
 - (void)receiveData:(NSData *)data start:(NSUInteger)start{
