@@ -43,7 +43,7 @@
     self = [super init];
     if (self) {
         _innerPlayer = [[LabradorInnerPlayer alloc] initWithProvider:self] ;
-        _dataProvider = [[LabradorNetworkProvider alloc] initWithURLString:@"http://audio01.dmhmusic.com/133_48_T10022565790_320_1_1_0_sdk-cpm/0105/M00/67/84/ChR45FmNKxKAMbUaAKtt4_FdDfk806.mp3?xcode=449892d1f581319b30ea83647101893f611634d" delegate:self] ;
+        _dataProvider = [[LabradorNetworkProvider alloc] initWithURLString:@"http://audio01.dmhmusic.com/133_48_T10022565790_320_1_1_0_sdk-cpm/0105/M00/67/84/ChR45FmNKxKAMbUaAKtt4_FdDfk806.mp3?xcode=c5a686fc8f49da1d30ec30de60818390aca6a36" delegate:self] ;
         _weakProxyObject = [[LabradorProxyObject alloc] initWithTarget:self] ;
     }
     return self;
