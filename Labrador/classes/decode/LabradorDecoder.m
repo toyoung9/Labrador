@@ -1,22 +1,22 @@
 //
-//  LabradorAFSParser.m
+//  LabradorDecoder.m
 //  Labrador
 //
 //  Created by legendry on 2018/8/8.
 //  Copyright © 2018 legendry. All rights reserved.
 //
 
-#import "LabradorAFSParser.h"
+#import "LabradorDecoder.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "LabradorAudioPacket.h"
 #import "configure.h"
-@interface LabradorAFSParser()
+@interface LabradorDecoder()
 {
     AudioFileStreamID _audioFileStreamID ;
     LabradorAudioInformation _audioInformation ;
     
 }
-@property(nonatomic, weak)id<LabradorDataProvider> dataProvider ;
+@property(nonatomic, weak)id<LabradorDecoderDelegate> delegate ;
 @property(nonatomic, assign)UInt32 dataOffset ;
 @property(nonatomic, strong)NSMutableArray<LabradorAudioFrame *> *frames ;
 @property(nonatomic, assign)UInt32 frameByteSize ;
@@ -63,7 +63,7 @@ NS_INLINE void _PropertyListenerProc(void *                             inClient
                                      AudioFileStreamID                  inAudioFileStream,
                                      AudioFileStreamPropertyID          inPropertyID,
                                      AudioFileStreamPropertyFlags       *ioFlags){
-    LabradorAFSParser *this = (__bridge LabradorAFSParser *)inClientData ;
+    LabradorDecoder *this = (__bridge LabradorDecoder *)inClientData ;
     [this parseAudioFileStreamWithPropertyID:inPropertyID] ;
 }
 NS_INLINE void _PacketsProc(void *                              inClientData,
@@ -72,20 +72,20 @@ NS_INLINE void _PacketsProc(void *                              inClientData,
                             const void *                        inInputData,
                             AudioStreamPacketDescription        *inPacketDescriptions){
     NSLog(@"得到音频数据: %u, %u, %@", inNumberBytes, inNumberPackets, [NSThread currentThread]) ;
-    LabradorAFSParser *this = (__bridge LabradorAFSParser *)inClientData ;
+    LabradorDecoder *this = (__bridge LabradorDecoder *)inClientData ;
     [this parseAudioPacketWithInNumberBytes:inNumberBytes inNumberPackets:inNumberPackets inInputData:inInputData inPacketDescriptions:inPacketDescriptions] ;
 }
 
 
-@implementation LabradorAFSParser
+@implementation LabradorDecoder
 
-- (instancetype)init:(id<LabradorDataProvider>)provider
+- (instancetype)init:(id<LabradorDecoderDelegate>)delegate
 {
     self = [super init];
     if (self) {
-        NSAssert(provider != NULL, @"LABAudioDataProviderProtocol can't be NULL.") ;
+        NSAssert(delegate != NULL, @"LABAudioDataProviderProtocol can't be NULL.") ;
         self.frameByteSize = 0 ;
-        self.dataProvider = provider ;
+        self.delegate = delegate ;
         self.dataOffset = 0 ;
         self.frames = [[NSMutableArray<LabradorAudioFrame *> alloc] initWithCapacity:10] ;
         //初始化AudioFileStream
@@ -101,7 +101,7 @@ NS_INLINE void _PacketsProc(void *                              inClientData,
         uint32_t byte_size = LabradorAudioHeaderInputSize ;
         void *bytes = malloc(byte_size) ;
         //从数据提供器中读取指定的字节来解析头信息
-        NSUInteger read_size = [provider getBytes:bytes size:byte_size offset:0 type:DownloadTypeHeader] ;
+        NSUInteger read_size = [self.delegate getBytes:bytes size:byte_size offset:0 type:DownloadTypeHeader] ;
         status = AudioFileStreamParseBytes(_audioFileStreamID, (UInt32)read_size, bytes, 0) ;
         free(bytes) ;
         self.dataOffset += (UInt32)read_size ;
@@ -122,8 +122,9 @@ NS_INLINE void _PacketsProc(void *                              inClientData,
         {
             //音频播放器需要的数据信息已经准备完成
             _audioInformation.duration = _audioInformation.audioDataByteCount * 8 / _audioInformation.bitRate ;
-            if(self.dataProvider) {
-                [self.dataProvider receiveContentLength:_audioInformation.audioDataByteCount + _audioInformation.dataOffset] ;
+            _audioInformation.totalSize = _audioInformation.audioDataByteCount + _audioInformation.dataOffset ;
+            if(self.delegate && [self.delegate respondsToSelector:@selector(prepared:)]) {
+                [self.delegate prepared:_audioInformation] ;
             }
             _PrintLabradorAudioInformation(_audioInformation) ;
         }
@@ -165,7 +166,7 @@ NS_INLINE void _PacketsProc(void *                              inClientData,
     if (self.frames.count <= 0) {
         NSUInteger byte_size = LabradorAudioQueueBufferCacheSize  ;
         void *bytes = malloc(byte_size) ;
-        NSUInteger size = [_dataProvider getBytes:bytes size:byte_size offset:self.dataOffset type:DownloadTypeAudioData] ;
+        NSUInteger size = [self.delegate getBytes:bytes size:byte_size offset:self.dataOffset type:DownloadTypeAudioData] ;
         AudioFileStreamParseBytes(_audioFileStreamID, (UInt32)size, bytes, 0) ;
         self.dataOffset += (UInt32)size ;
         free(bytes) ;

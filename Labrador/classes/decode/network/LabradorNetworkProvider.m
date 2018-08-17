@@ -21,21 +21,21 @@
     UInt32 _minSize;
     //cache manager for mapping
     LabradorCache *_cache ;
-    //download audio data from network
+    //download audio header and data from network
     LabradorDownloader *_downloader ;
     //lock for read & write cache file
     NSCondition *_lock ;
     //write data when receive from network
-    NSFileHandle *_dataWriteHandle ;
+    NSFileHandle *_fileWriteHandle ;
     //read data from cache file for play
-    NSFileHandle *_dataReadHandle ;
+    NSFileHandle *_fileReadHandle ;
 }
 @end
+
 @implementation LabradorNetworkProvider
 
-#pragma mark - initialize
-
-- (instancetype)initWithURLString:(NSString * _Nonnull)urlString delegate:(nonnull id<LabradorNetworkProviderDelegate>)delegate
+- (instancetype)initWithURLString:(NSString * _Nonnull)urlString
+                         delegate:(nonnull id<LabradorNetworkProviderDelegate>)delegate
 {
     self = [super init];
     if (self) {
@@ -54,31 +54,11 @@
     if(![[NSFileManager defaultManager] fileExistsAtPath:path]) {
         [[NSFileManager defaultManager] createFileAtPath:path contents:NULL attributes:NULL] ;
     }
-    _dataWriteHandle = [NSFileHandle fileHandleForWritingAtPath:path] ;
-    _dataReadHandle = [NSFileHandle fileHandleForReadingAtPath:path] ;
+    _fileWriteHandle = [NSFileHandle fileHandleForWritingAtPath:path] ;
+    _fileReadHandle = [NSFileHandle fileHandleForReadingAtPath:path] ;
 }
 
-- (void)notifyStatus:(LabradorCacheStatus)status{
-    if(_cacheStatus == status) return ;
-    _cacheStatus = status ;
-    if(_delegate) [_delegate cacheStatusChanged:_cacheStatus] ;
-}
-- (void)notifyPercent {
-    if(_delegate) [_delegate loadingPercent:_cache.cachePercent] ;
-}
-- (void)start {
-    if(_cache.isInitializedCache) {
-        if([_cache hasEnoughData:_minSize from:0]) {
-            [self notifyStatus:LabradorCacheStatusEnough] ;
-        } else {
-            [self notifyStatus:LabradorCacheStatusLoading] ;
-        }
-        [self notifyPercent] ;
-        [self startNextFragmentDownload] ;
-    }
-}
-
-//start new fragment download
+#pragma mark - Download Control
 - (void)startNextFragmentDownload {
     NSRange range = [_cache findNextDownloadFragment] ;
     if(range.length == 0) return ;
@@ -90,8 +70,7 @@
     [_downloader start] ;
 }
 
-#pragma mark - LabradorDataProvider implementation
-
+#pragma mark - LabradorDataProvider Delegate
 - (NSUInteger)getBytes:(void *)bytes
                   size:(NSUInteger)size
                 offset:(NSUInteger)offset
@@ -113,8 +92,8 @@
             [_downloader start] ;
             [_lock wait] ;
         }
-        [_dataReadHandle seekToFileOffset:0] ;
-        NSData *data = [_dataReadHandle readDataOfLength:size] ;
+        [_fileReadHandle seekToFileOffset:0] ;
+        NSData *data = [_fileReadHandle readDataOfLength:size] ;
         [data getBytes:bytes range:NSMakeRange(0, size)] ;
         length = data.length ;
     } else {
@@ -126,8 +105,8 @@
             [_lock wait] ;
         }
         //满足后进行数据读取
-        [_dataReadHandle seekToFileOffset:offset] ;
-        NSData *data = [_dataReadHandle readDataOfLength:size] ;
+        [_fileReadHandle seekToFileOffset:offset] ;
+        NSData *data = [_fileReadHandle readDataOfLength:size] ;
         [data getBytes:bytes range:NSMakeRange(0, size)] ;
         length = data.length ;
     }
@@ -135,13 +114,24 @@
     return length ;
 }
 
+
+- (void)prepared:(LabradorAudioInformation)information{
+    //初始化头信息与缓存映射文件信息
+    if(_downloader.downloadType == DownloadTypeHeader) {
+        _downloader = nil ;
+        [_cache initializeLength:information.totalSize] ;
+        [self startNextFragmentDownload] ;
+    }
+}
+
+#pragma mark - Downloader Delegate
+//receive from current downloader
 - (void)receiveData:(NSData *)data start:(NSUInteger)start{
     //receive data from network
     if(data && data.length > 0) {
         [_lock lock] ;
-        [_dataWriteHandle seekToFileOffset:start] ;
-        [_dataWriteHandle writeData:data] ;
-        //写入映射缓存
+        [_fileWriteHandle seekToFileOffset:start] ;
+        [_fileWriteHandle writeData:data] ;
         [_cache completedFragment:start length:data.length] ;
         if(_downloader.downloadType == DownloadTypeHeader) {
             // download header information data
@@ -158,22 +148,22 @@
         [_lock unlock] ;
     }
 }
-- (void)receiveContentLength:(NSUInteger)contentLength{
-    //初始化头信息与缓存映射文件信息
-    NSLog(@"文件大小: %lu", contentLength) ;
-    if(_downloader.downloadType == DownloadTypeHeader) {
-        _downloader = nil ;
-        [_cache initializeLength:contentLength] ;
-        [self startNextFragmentDownload] ;
-    }
-}
+//current downloader download completed
 - (void)completed:(BOOL)isDownloadFullData {
-    NSLog(@"片段下载完成: %@, %ld, %ld", @(isDownloadFullData), _downloader.downloadSize, _downloader.length) ;
-    
     if(_downloader.downloadType == DownloadTypeAudioData) {
         _downloader = nil ;
         [self startNextFragmentDownload] ;
     }
+}
+
+#pragma mark - Notify
+- (void)notifyStatus:(LabradorCacheStatus)status{
+    if(_cacheStatus == status) return ;
+    _cacheStatus = status ;
+    if(_delegate && [_delegate respondsToSelector:@selector(cacheStatusChanged:)]) [_delegate cacheStatusChanged:_cacheStatus] ;
+}
+- (void)notifyPercent {
+    if(_delegate && [_delegate respondsToSelector:@selector(loadingPercent:)]) [_delegate loadingPercent:_cache.cachePercent] ;
 }
 
 @end

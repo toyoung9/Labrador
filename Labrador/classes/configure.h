@@ -9,6 +9,8 @@
 #ifndef configure_h
 #define configure_h
 
+#import <AudioToolbox/AudioQueue.h>
+
 #define LabradorAudioQueueBufferCacheSize   1024 * 32
 #define LabradorAudioHeaderInputSize        1024 * 10
 
@@ -21,5 +23,17 @@ typedef NS_ENUM(NSInteger,LabradorCacheStatus){
     LabradorCacheStatusLoading = 1, //downloading data
     LabradorCacheStatusEnough,//enough cache data
 };
+
+struct LabradorAudioInformation{
+    AudioStreamBasicDescription description ;
+    SInt64 dataOffset ;
+    UInt64 audioDataByteCount ;
+    UInt32 bitRate ;
+    UInt64 audioDataPacketCount ;
+    float duration ;
+    UInt64 totalSize ;
+};
+typedef struct LabradorAudioInformation LabradorAudioInformation;
+
 
 #endif /* configure_h */

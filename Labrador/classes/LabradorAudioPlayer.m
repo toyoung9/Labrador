@@ -7,17 +7,17 @@
 //
 
 #import "LabradorAudioPlayer.h"
-#import "LabradorParse.h"
+#import "LabradorDecodable.h"
 #import "LabradorDataProvider.h"
-#import "LabradorAFSParser.h"
+#import "LabradorDecoder.h"
 #import "LabradorLocalProvider.h"
 #import "LabradorInnerPlayer.h"
 #import "configure.h"
 #import "LabradorNetworkProvider.h"
 
-@interface LabradorAudioPlayer()<LabradorInnerPlayerDataProvider, LabradorNetworkProviderDelegate>
+@interface LabradorAudioPlayer()<LabradorInnerPlayerDataProvider, LabradorNetworkProviderDelegate, LabradorDecoderDelegate>
 {
-    id<LabradorParse> _parser ;
+    id<LabradorDecodable> _parser ;
     id<LabradorDataProvider> _dataProvider ;
     LabradorInnerPlayer *_innerPlayer ;
     NSPort *_port ;
@@ -39,35 +39,29 @@
         //初始化音频播放器(基于Audio Queue)
         _innerPlayer = [[LabradorInnerPlayer alloc] initWithProvider:self] ;
         //初始化数据提供器(网络数据提供器)
-        _dataProvider = [[LabradorNetworkProvider alloc] initWithURLString:@"http://audio01.dmhmusic.com/133_48_T10022565790_320_1_1_0_sdk-cpm/0105/M00/67/84/ChR45FmNKxKAMbUaAKtt4_FdDfk806.mp3?xcode=bbf2b2c4511398b230d8c6d1e798ad0ca5fefcc" delegate:self] ;
+        _dataProvider = [[LabradorNetworkProvider alloc] initWithURLString:@"http://audio01.dmhmusic.com/133_48_T10022565790_320_1_1_0_sdk-cpm/0105/M00/67/84/ChR45FmNKxKAMbUaAKtt4_FdDfk806.mp3?xcode=3c7fcb9880f4eaf530e9997ce18f2c801af5da3" delegate:self] ;
         
     }
     return self;
 }
 
-
 - (void)startDecodeAndPlay {
-    //注册一个空的NSPort,让线程保持
     _runloop = [NSRunLoop currentRunLoop] ;
     [_runloop addPort:_port forMode:NSRunLoopCommonModes] ;
-    //初始化,并且开始读取音频头信息,解析音频元数据,为播放做准备
-    _parser = [[LabradorAFSParser alloc] init:_dataProvider] ;
+    _parser = [[LabradorDecoder alloc] init:self] ;
     _playStatus = LabradorAudioPlayerPlayStatusPrepared ;
-    NSLog(@"[Cache]准备完成...") ;
     [_innerPlayer configureDescription:[_parser audioInformation].description] ;
     if(_delegate) [_delegate labradorAudioPlayerPrepared:self] ;
 }
 
-
+#pragma mark - LabradorInnerPlayerDataProvider
 - (LabradorAudioFrame *)nextFrame {
     return [_parser product]  ;
 }
 
-#pragma mark - music control
+#pragma mark - Music Control
 
 - (void)prepare {
-    //开始一个新的线程
-    NSLog(@"[Cache]正在准备中...") ;
     _playStatus = LabradorAudioPlayerPlayStatusPreparing ;
     _port = [NSPort port] ;
     _decodeAndPlayThread = [[NSThread alloc] initWithTarget:self selector:@selector(startDecodeAndPlay) object:nil] ;
@@ -93,20 +87,31 @@
     }
 }
 
-#pragma mark -
+#pragma mark - LabradorNetworkProviderDelegate
 
 - (void)cacheStatusChanged:(LabradorCacheStatus)newCacheStatus {
     _loadingStatus = newCacheStatus ;
     switch (newCacheStatus) {
         case LabradorCacheStatusLoading:
-            NSLog(@"[Cache]正在加载数据...") ;
             break ;
         case LabradorCacheStatusEnough:
-            NSLog(@"[Cache]有足够的数据可以播放了...") ;
             break ;
     }
 }
 - (void)loadingPercent:(float)percent {
 //    NSLog(@"加载进度: %f", percent) ;
+}
+
+#pragma mark - LabradorDecoderDelegate
+
+- (NSUInteger)getBytes:(void *)bytes
+                  size:(NSUInteger)size
+                offset:(NSUInteger)offset
+                  type:(DownloadType)type {
+    return [_dataProvider getBytes:bytes size:size offset:offset type:type] ;
+}
+
+- (void)prepared:(LabradorAudioInformation)information {
+    [_dataProvider prepared:information] ;
 }
 @end

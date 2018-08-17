@@ -12,7 +12,7 @@
 		C374406A2121CEAF00F3F775 /* LabradorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C37440692121CEAF00F3F775 /* LabradorTests.m */; };
 		C37440732121CED900F3F775 /* NSStringExtensionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C37440722121CED900F3F775 /* NSStringExtensionsTests.m */; };
 		C37440742121CEE500F3F775 /* NSString+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = C37440612121CCC000F3F775 /* NSString+Extensions.m */; };
-		C3820C45211AC60500EA0BD5 /* LabradorAFSParser.m in Sources */ = {isa = PBXBuildFile; fileRef = C3820C44211AC60500EA0BD5 /* LabradorAFSParser.m */; };
+		C3820C45211AC60500EA0BD5 /* LabradorDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = C3820C44211AC60500EA0BD5 /* LabradorDecoder.m */; };
 		C3820C48211ACE9600EA0BD5 /* LabradorLocalProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = C3820C47211ACE9600EA0BD5 /* LabradorLocalProvider.m */; };
 		C3820C4B211ACED600EA0BD5 /* t.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C3820C4A211ACED600EA0BD5 /* t.mp3 */; };
 		C3820C52211AFDFA00EA0BD5 /* LabradorInnerPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C3820C51211AFDFA00EA0BD5 /* LabradorInnerPlayer.m */; };
@@ -50,9 +50,9 @@
 		C374406B2121CEAF00F3F775 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C37440712121CED900F3F775 /* NSStringExtensionsTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSStringExtensionsTests.h; sourceTree = "<group>"; };
 		C37440722121CED900F3F775 /* NSStringExtensionsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSStringExtensionsTests.m; sourceTree = "<group>"; };
-		C3820C41211AC56B00EA0BD5 /* LabradorParse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LabradorParse.h; sourceTree = "<group>"; };
-		C3820C43211AC60500EA0BD5 /* LabradorAFSParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LabradorAFSParser.h; sourceTree = "<group>"; };
-		C3820C44211AC60500EA0BD5 /* LabradorAFSParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LabradorAFSParser.m; sourceTree = "<group>"; };
+		C3820C41211AC56B00EA0BD5 /* LabradorDecodable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LabradorDecodable.h; sourceTree = "<group>"; };
+		C3820C43211AC60500EA0BD5 /* LabradorDecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LabradorDecoder.h; sourceTree = "<group>"; };
+		C3820C44211AC60500EA0BD5 /* LabradorDecoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LabradorDecoder.m; sourceTree = "<group>"; };
 		C3820C46211ACE9600EA0BD5 /* LabradorLocalProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LabradorLocalProvider.h; sourceTree = "<group>"; };
 		C3820C47211ACE9600EA0BD5 /* LabradorLocalProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LabradorLocalProvider.m; sourceTree = "<group>"; };
 		C3820C4A211ACED600EA0BD5 /* t.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = t.mp3; sourceTree = "<group>"; };
@@ -140,15 +140,15 @@
 			path = LabradorTests;
 			sourceTree = "<group>";
 		};
-		C3820C42211AC5D500EA0BD5 /* parse */ = {
+		C3820C42211AC5D500EA0BD5 /* decode */ = {
 			isa = PBXGroup;
 			children = (
 				C374405E2121CB5700F3F775 /* local */,
 				C374405D2121CB2900F3F775 /* network */,
-				C3820C43211AC60500EA0BD5 /* LabradorAFSParser.h */,
-				C3820C44211AC60500EA0BD5 /* LabradorAFSParser.m */,
+				C3820C43211AC60500EA0BD5 /* LabradorDecoder.h */,
+				C3820C44211AC60500EA0BD5 /* LabradorDecoder.m */,
 			);
-			path = parse;
+			path = decode;
 			sourceTree = "<group>";
 		};
 		C3820C49211ACEC900EA0BD5 /* resources */ = {
@@ -163,7 +163,7 @@
 		C3820C4D211AFBB400EA0BD5 /* protocol */ = {
 			isa = PBXGroup;
 			children = (
-				C3820C41211AC56B00EA0BD5 /* LabradorParse.h */,
+				C3820C41211AC56B00EA0BD5 /* LabradorDecodable.h */,
 				C3820C4E211AFBC900EA0BD5 /* LabradorDataProvider.h */,
 			);
 			path = protocol;
@@ -231,7 +231,7 @@
 				C374405F2121CBFE00F3F775 /* utilitys */,
 				C3820C4F211AFD5E00EA0BD5 /* inner_player */,
 				C3820C4D211AFBB400EA0BD5 /* protocol */,
-				C3820C42211AC5D500EA0BD5 /* parse */,
+				C3820C42211AC5D500EA0BD5 /* decode */,
 				C3C8670C21189637000110A9 /* LabradorAudioPlayer.h */,
 				C3C8670D21189637000110A9 /* LabradorAudioPlayer.m */,
 				C3820C4C211ACF3400EA0BD5 /* Labrador.h */,
@@ -363,7 +363,7 @@
 				C3820C52211AFDFA00EA0BD5 /* LabradorInnerPlayer.m in Sources */,
 				C3820C48211ACE9600EA0BD5 /* LabradorLocalProvider.m in Sources */,
 				C3C866F721189551000110A9 /* AppDelegate.m in Sources */,
-				C3820C45211AC60500EA0BD5 /* LabradorAFSParser.m in Sources */,
+				C3820C45211AC60500EA0BD5 /* LabradorDecoder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
