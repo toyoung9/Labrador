@@ -14,10 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @protocol LabradorDownloaderDelegate <NSObject>
-
 - (void)receiveData:(NSData *)data start:(NSUInteger)start;
 - (void)completed:(BOOL)isDownloadFullData;
-
+- (void)onError:(NSError *)error ;
 @end
 
 @interface LabradorDownloader : NSObject

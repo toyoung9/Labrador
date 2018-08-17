@@ -36,31 +36,33 @@
 {
     self = [super init];
     if (self) {
-        //初始化音频播放器(基于Audio Queue)
         _innerPlayer = [[LabradorInnerPlayer alloc] initWithProvider:self] ;
-        //初始化数据提供器(网络数据提供器)
-        _dataProvider = [[LabradorNetworkProvider alloc] initWithURLString:@"http://audio01.dmhmusic.com/133_48_T10022565790_320_1_1_0_sdk-cpm/0105/M00/67/84/ChR45FmNKxKAMbUaAKtt4_FdDfk806.mp3?xcode=3c7fcb9880f4eaf530e9997ce18f2c801af5da3" delegate:self] ;
-        
+        _dataProvider = [[LabradorNetworkProvider alloc] initWithURLString:@"http://audio01.dmhmusic.com/133_48_T10022565790_320_1_1_0_sdk-cpm/0105/M00/67/84/ChR45FmNKxKAMbUaAKtt4_FdDfk806.mp3?xcode=3c7fcb9880f4eaf530e9997ce18f2c801af5da31" delegate:self] ;
     }
     return self;
 }
-
 - (void)startDecodeAndPlay {
     _runloop = [NSRunLoop currentRunLoop] ;
     [_runloop addPort:_port forMode:NSRunLoopCommonModes] ;
     _parser = [[LabradorDecoder alloc] init:self] ;
     _playStatus = LabradorAudioPlayerPlayStatusPrepared ;
     [_innerPlayer configureDescription:[_parser audioInformation].description] ;
-    if(_delegate) [_delegate labradorAudioPlayerPrepared:self] ;
+    [self _prepareForPlay] ;
 }
-
 #pragma mark - LabradorInnerPlayerDataProvider
 - (LabradorAudioFrame *)nextFrame {
     return [_parser product]  ;
 }
-
+#pragma mark - Delegate Control
+- (void)_prepareForPlay {
+    if(_delegate && [_delegate respondsToSelector:@selector(labradorAudioPlayerPrepared:)]) [_delegate labradorAudioPlayerPrepared:self] ;
+}
+- (void)_someErrorHappend:(NSError *)error {
+    if(_delegate && [_delegate respondsToSelector:@selector(labradorAudioPlayerWithError:player:)]) {
+        [_delegate labradorAudioPlayerWithError:error player:self] ;
+    }
+}
 #pragma mark - Music Control
-
 - (void)prepare {
     _playStatus = LabradorAudioPlayerPlayStatusPreparing ;
     _port = [NSPort port] ;
@@ -86,31 +88,29 @@
         _playStatus = LabradorAudioPlayerPlayStatusPlaying ;
     }
 }
-
 #pragma mark - LabradorNetworkProviderDelegate
-
-- (void)cacheStatusChanged:(LabradorCacheStatus)newCacheStatus {
-    _loadingStatus = newCacheStatus ;
-    switch (newCacheStatus) {
-        case LabradorCacheStatusLoading:
+- (void)statusChanged:(LabradorCacheMappingStatus)newStatus {
+    _loadingStatus = newStatus ;
+    switch (newStatus) {
+        case LabradorCacheMappingStatusLoading:
             break ;
-        case LabradorCacheStatusEnough:
+        case LabradorCacheMappingStatusEnough:
             break ;
     }
 }
 - (void)loadingPercent:(float)percent {
-//    NSLog(@"加载进度: %f", percent) ;
+    
 }
-
+- (void)onError:(NSError *)error {
+    [self _someErrorHappend:error] ;
+}
 #pragma mark - LabradorDecoderDelegate
-
 - (NSUInteger)getBytes:(void *)bytes
                   size:(NSUInteger)size
                 offset:(NSUInteger)offset
                   type:(DownloadType)type {
     return [_dataProvider getBytes:bytes size:size offset:offset type:type] ;
 }
-
 - (void)prepared:(LabradorAudioInformation)information {
     [_dataProvider prepared:information] ;
 }

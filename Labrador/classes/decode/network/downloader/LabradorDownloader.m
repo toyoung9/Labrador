@@ -74,8 +74,6 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:_urlString]] ;
     NSString *rangString = [NSString stringWithFormat:@"bytes=%ld-%ld", _start,(_start + _length - 1)] ;
     [request setValue:rangString forHTTPHeaderField:@"Range"] ;
-    NSLog(@"==============================================================") ;
-    NSLog(@"即将下载的范围: %@", rangString) ;
     NSURLSessionDataTask *task = [_session dataTaskWithRequest:request] ;
     [task resume] ;
 }
@@ -86,11 +84,15 @@
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
 didReceiveResponse:(NSHTTPURLResponse *)response
  completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
-    NSLog(@"didReceiveResponse completionHandler: %@", response.allHeaderFields) ;
-    completionHandler(NSURLSessionResponseAllow) ;
+    if(response.statusCode != 200) {
+        if(self.delegate && [self.delegate respondsToSelector:@selector(onError:)]) {
+            [self.delegate onError:[NSError errorWithDomain:NSURLErrorDomain code:response.statusCode userInfo:@{@"Reason": [NSString stringWithFormat:@"URL Response error: %ld", response.statusCode]}]] ;
+        }
+        completionHandler(NSURLSessionResponseCancel) ;
+    } else {
+        completionHandler(NSURLSessionResponseAllow) ;
+    }
 }
-
-
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
     didReceiveData:(NSData *)data{
     if(!data || data.length == 0) return ;
@@ -101,14 +103,19 @@ didReceiveResponse:(NSHTTPURLResponse *)response
         _callBackDataLength += tmpCallBackLength ;
     }
 }
-
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
-didCompleteWithError:(nullable NSError *)error {
-    if(self.delegate) {
-        [self.delegate receiveData:[_data subdataWithRange:NSMakeRange(_callBackDataLength, _data.length - _callBackDataLength)] start:_callBackDataLength + _start] ;
-        _callBackDataLength = _data.length ;
-        [self.delegate completed:[self downloadCompleted]] ;
-        NSLog(@"==============================================================") ;
+- (void)URLSession:(NSURLSession *)session
+              task:(NSURLSessionTask *)task
+    didCompleteWithError:(nullable NSError *)error {
+    if(error) {
+        if(self.delegate && [self.delegate respondsToSelector:@selector(onError:)]) {
+            [self.delegate onError:error] ;
+        }
+    } else {
+        if(self.delegate && [self.delegate respondsToSelector:@selector(receiveData:start:)] && [self.delegate respondsToSelector:@selector(completed:)]) {
+            [self.delegate receiveData:[_data subdataWithRange:NSMakeRange(_callBackDataLength, _data.length - _callBackDataLength)] start:_callBackDataLength + _start] ;
+            _callBackDataLength = _data.length ;
+            [self.delegate completed:[self downloadCompleted]] ;
+        }
     }
 }
 

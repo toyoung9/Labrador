@@ -7,7 +7,7 @@
 //
 
 #import "LabradorNetworkProvider.h"
-#import "LabradorCache.h"
+#import "LabradorCacheMapping.h"
 #import "LabradorDownloader.h"
 #import "configure.h"
 #import "NSString+Extensions.h"
@@ -20,7 +20,7 @@
     //min size for play
     UInt32 _minSize;
     //cache manager for mapping
-    LabradorCache *_cache ;
+    LabradorCacheMapping *_cache ;
     //download audio header and data from network
     LabradorDownloader *_downloader ;
     //lock for read & write cache file
@@ -43,7 +43,7 @@
         _lock = [[NSCondition alloc] init] ;
         _urlString = urlString ;
         _delegate = delegate ;
-        _cache = [[LabradorCache alloc] initWithURLString:_urlString] ;
+        _cache = [[LabradorCacheMapping alloc] initWithURLString:_urlString] ;
         [self initializeFileHandle] ;
     }
     return self;
@@ -97,14 +97,11 @@
         [data getBytes:bytes range:NSMakeRange(0, size)] ;
         length = data.length ;
     } else {
-        //查找接下来连续缓存区是否满足最小设定
         NSRange range = [_cache findNextCacheFragmentFrom:_downloader.startLocation] ;
         if(range.length < _minSize) {
-            //不满足,则等待数据下载
-            [self notifyStatus:LabradorCacheStatusLoading] ;
+            [self notifyStatus:LabradorCacheMappingStatusLoading] ;
             [_lock wait] ;
         }
-        //满足后进行数据读取
         [_fileReadHandle seekToFileOffset:offset] ;
         NSData *data = [_fileReadHandle readDataOfLength:size] ;
         [data getBytes:bytes range:NSMakeRange(0, size)] ;
@@ -116,10 +113,9 @@
 
 
 - (void)prepared:(LabradorAudioInformation)information{
-    //初始化头信息与缓存映射文件信息
     if(_downloader.downloadType == DownloadTypeHeader) {
         _downloader = nil ;
-        [_cache initializeLength:information.totalSize] ;
+        [_cache configureCacheMappingWithFileSize:information.totalSize] ;
         [self startNextFragmentDownload] ;
     }
 }
@@ -141,7 +137,7 @@
         } else {
             if([_cache hasEnoughData:_minSize from:(UInt32)_downloader.startLocation]) {
                 [_lock signal] ;
-                [self notifyStatus:LabradorCacheStatusEnough] ;
+                [self notifyStatus:LabradorCacheMappingStatusEnough] ;
             }
         }
         [self notifyPercent] ;
@@ -155,12 +151,17 @@
         [self startNextFragmentDownload] ;
     }
 }
+- (void)onError:(NSError *)error {
+    if(_delegate && [_delegate respondsToSelector:@selector(onError:)]) {
+        [_delegate onError:error] ;
+    }
+}
 
 #pragma mark - Notify
-- (void)notifyStatus:(LabradorCacheStatus)status{
+- (void)notifyStatus:(LabradorCacheMappingStatus)status{
     if(_cacheStatus == status) return ;
     _cacheStatus = status ;
-    if(_delegate && [_delegate respondsToSelector:@selector(cacheStatusChanged:)]) [_delegate cacheStatusChanged:_cacheStatus] ;
+    if(_delegate && [_delegate respondsToSelector:@selector(statusChanged:)]) [_delegate statusChanged:_cacheStatus] ;
 }
 - (void)notifyPercent {
     if(_delegate && [_delegate respondsToSelector:@selector(loadingPercent:)]) [_delegate loadingPercent:_cache.cachePercent] ;

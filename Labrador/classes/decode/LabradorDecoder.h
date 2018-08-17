@@ -11,8 +11,6 @@
 #import "LabradorDataProvider.h"
 
 @protocol LabradorDecoderDelegate <LabradorDataProvider>
-
-
 @end
 
 @interface LabradorDecoder : NSObject <LabradorDecodable>

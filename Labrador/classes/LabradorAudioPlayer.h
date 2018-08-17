@@ -26,13 +26,16 @@ typedef NS_ENUM(NSInteger, LabradorAudioPlayerPlayStatus){
 
 @class LabradorAudioPlayer ;
 @protocol LabradorAudioPlayerDelegate <NSObject>
+@optional
 - (void)labradorAudioPlayerPrepared:(LabradorAudioPlayer *)player ;
+- (void)labradorAudioPlayerWithError:(NSError *)error player:(LabradorAudioPlayer *)player ;
+- (void)labradorAudioPlayerDidFinishPlaying:(LabradorAudioPlayer *)player successfully:(BOOL)successfully ;
 @end
 
 @interface LabradorAudioPlayer : NSObject
 @property (nonatomic, weak)id<LabradorAudioPlayerDelegate> delegate ;
 @property (nonatomic, assign)LabradorAudioPlayerPlayStatus playStatus ;
-@property (nonatomic, assign)LabradorCacheStatus loadingStatus ;
+@property (nonatomic, assign)LabradorCacheMappingStatus loadingStatus ;
 
 - (void)prepare;
 - (void)play ;

@@ -25,9 +25,8 @@
 @property(nonatomic, assign)UInt32 bitRate ;
 @property(nonatomic, assign)UInt64 totalByteSize ;
 
-
-- (void)parseAudioFileStreamWithPropertyID:(AudioFilePropertyID)pid ;
-- (void)parseAudioPacketWithInNumberBytes:(UInt32)inNumberBytes
+- (void)decodeForPropertyID:(AudioFilePropertyID)pid ;
+- (void)decodePacketWithInNumberBytes:(UInt32)inNumberBytes
                           inNumberPackets:(UInt32)inNumberPackets
                               inInputData:(const void *)inInputData
                      inPacketDescriptions:(AudioStreamPacketDescription *)inPacketDescriptions ;
@@ -46,16 +45,16 @@ NS_INLINE void _GetAudioFileStreamPropertyValue(AudioFileStreamID sid, AudioFile
  */
 NS_INLINE void _PrintLabradorAudioInformation(LabradorAudioInformation information){
     NSLog(@"") ;
-    NSLog(@"*******************************************************") ;
+    NSLog(@"===========================================================================") ;
     NSLog(@"") ;
-    NSLog(@"-------------------- 音频文件信息 -----------------------") ;
-    NSLog(@"时长: %f", information.duration) ;
-    NSLog(@"比特率: %u", information.bitRate) ;
-    NSLog(@"音频起始位置: %lld", information.dataOffset) ;
-    NSLog(@"音频文件大小: %lld", information.audioDataByteCount + information.dataOffset) ;
-    NSLog(@"音频包总数: %lld", information.audioDataPacketCount) ;
+    NSLog(@"-------------------- Audio Stream Basic Information -----------------------") ;
+    NSLog(@"Druation: %f", information.duration) ;
+    NSLog(@"BitRate: %u", information.bitRate) ;
+    NSLog(@"Audio Data Start Offset: %lld", information.dataOffset) ;
+    NSLog(@"Audio Data Total Size: %lld", information.audioDataByteCount + information.dataOffset) ;
+    NSLog(@"Audio Data Packets Count: %lld", information.audioDataPacketCount) ;
     NSLog(@"") ;
-    NSLog(@"*******************************************************") ;
+    NSLog(@"===========================================================================") ;
     NSLog(@"") ;
 }
 
@@ -64,16 +63,15 @@ NS_INLINE void _PropertyListenerProc(void *                             inClient
                                      AudioFileStreamPropertyID          inPropertyID,
                                      AudioFileStreamPropertyFlags       *ioFlags){
     LabradorDecoder *this = (__bridge LabradorDecoder *)inClientData ;
-    [this parseAudioFileStreamWithPropertyID:inPropertyID] ;
+    [this decodeForPropertyID:inPropertyID] ;
 }
 NS_INLINE void _PacketsProc(void *                              inClientData,
                             UInt32                              inNumberBytes,
                             UInt32                              inNumberPackets,
                             const void *                        inInputData,
                             AudioStreamPacketDescription        *inPacketDescriptions){
-    NSLog(@"得到音频数据: %u, %u, %@", inNumberBytes, inNumberPackets, [NSThread currentThread]) ;
     LabradorDecoder *this = (__bridge LabradorDecoder *)inClientData ;
-    [this parseAudioPacketWithInNumberBytes:inNumberBytes inNumberPackets:inNumberPackets inInputData:inInputData inPacketDescriptions:inPacketDescriptions] ;
+    [this decodePacketWithInNumberBytes:inNumberBytes inNumberPackets:inNumberPackets inInputData:inInputData inPacketDescriptions:inPacketDescriptions] ;
 }
 
 
@@ -88,7 +86,6 @@ NS_INLINE void _PacketsProc(void *                              inClientData,
         self.delegate = delegate ;
         self.dataOffset = 0 ;
         self.frames = [[NSMutableArray<LabradorAudioFrame *> alloc] initWithCapacity:10] ;
-        //初始化AudioFileStream
         OSStatus status = AudioFileStreamOpen((__bridge void *)self,
                                               _PropertyListenerProc,
                                               _PacketsProc,
@@ -113,7 +110,7 @@ NS_INLINE void _PacketsProc(void *                              inClientData,
     return self;
 }
 
-- (void)parseAudioFileStreamWithPropertyID:(AudioFilePropertyID)pid {
+- (void)decodeForPropertyID:(AudioFilePropertyID)pid {
     switch (pid) {
         case kAudioFileStreamProperty_DataFormat:
             _GetAudioFileStreamPropertyValue(_audioFileStreamID, pid, &_audioInformation.description, sizeof(AudioStreamBasicDescription)) ;
@@ -146,10 +143,10 @@ NS_INLINE void _PacketsProc(void *                              inClientData,
     }
 }
 
-- (void)parseAudioPacketWithInNumberBytes:(UInt32)inNumberBytes
-                          inNumberPackets:(UInt32)inNumberPackets
-                              inInputData:(const void *)inInputData
-                     inPacketDescriptions:(AudioStreamPacketDescription *)inPacketDescriptions {
+- (void)decodePacketWithInNumberBytes:(UInt32)inNumberBytes
+                      inNumberPackets:(UInt32)inNumberPackets
+                          inInputData:(const void *)inInputData
+                 inPacketDescriptions:(AudioStreamPacketDescription *)inPacketDescriptions {
     NSMutableArray<LabradorAudioPacket *> *tmps = [[NSMutableArray<LabradorAudioPacket *> alloc] init] ;
     for(int i = 0; i < inNumberPackets; i ++) {
         AudioStreamPacketDescription tmp = inPacketDescriptions[i] ;

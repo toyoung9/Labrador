@@ -19,9 +19,9 @@ typedef NS_ENUM(NSInteger, DownloadType){
     DownloadTypeAudioData = 2,
 };
 
-typedef NS_ENUM(NSInteger,LabradorCacheStatus){
-    LabradorCacheStatusLoading = 1, //downloading data
-    LabradorCacheStatusEnough,//enough cache data
+typedef NS_ENUM(NSInteger,LabradorCacheMappingStatus){
+    LabradorCacheMappingStatusLoading = 1, //downloading data
+    LabradorCacheMappingStatusEnough,//enough cache data
 };
 
 struct LabradorAudioInformation{
@@ -35,5 +35,13 @@ struct LabradorAudioInformation{
 };
 typedef struct LabradorAudioInformation LabradorAudioInformation;
 
+
+struct LabradorCacheMappingInformation {
+    char name[32];//MD5 name
+    UInt32 length;//file length
+    bool is_initialized;//
+    unsigned char *data;//data mapping(1byte -> 1024byte)
+};
+typedef struct LabradorCacheMappingInformation LabradorCacheMappingInformation;
 
 #endif /* configure_h */

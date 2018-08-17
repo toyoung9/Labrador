@@ -8,13 +8,13 @@
 
 #import "ViewController.h"
 #import "LabradorAudioPlayer.h"
-#import "LabradorCache.h"
+#import "LabradorCacheMapping.h"
 #import "LabradorNetworkProvider.h"
 
 @interface ViewController () <LabradorAudioPlayerDelegate>
 {
     LabradorAudioPlayer *_player ;
-    LabradorCache *_cache ;
+    LabradorCacheMapping *_cache ;
     LabradorNetworkProvider *_networkProvider ;
 }
 @end
@@ -26,22 +26,12 @@
     self.view.backgroundColor = [UIColor orangeColor] ;
     _player = [[LabradorAudioPlayer alloc] init] ;
     _player.delegate = self ;
-//
-//    _cache = [[LabradorCache alloc] initWithURLString:@"zbdd.mp3"] ;
-//    [_cache initializeLength:1024 * 1024 * 3] ;
-    
-//    [_cache downloadWithStart:1024 * 10 length:1024 * 30] ;
-    
+
 }
 
 
 - (IBAction)play:(id)sender {
     [_player prepare] ;
-//    NSRange range = [_cache findNextDownloadFragment] ;
-//    NSLog(@"需要下载的片段: %@", NSStringFromRange(range)) ;
-//    [_cache completedFragment:range.location * 1024 length:range.length * 1024] ;
-//    NSString *url = @"http://audio01.dmhmusic.com/114_95_T10032761338_128_1_1_0_sdk-cpm/0103/M00/A6/A6/ChR45VnBNauAG7GrAF7Km_rq-5E822.mp3?xcode=e6442be07dd1442a30aa39a5152e92f8921d7e9" ;
-//    _networkProvider = [[LabradorNetworkProvider alloc] initWithURLString:url] ;
 }
 - (IBAction)pause:(id)sender {
     [_player pause] ;
@@ -54,5 +44,8 @@
 - (void)labradorAudioPlayerPrepared:(LabradorAudioPlayer *)player {
     NSLog(@"-------------labradorAudioPlayerPrepared") ;
     [_player play] ;
+}
+- (void)labradorAudioPlayerWithError:(NSError *)error player:(LabradorAudioPlayer *)player {
+    NSLog(@"发生错误: %@", error) ;
 }
 @end

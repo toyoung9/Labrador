@@ -7,25 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
-
-struct LabradorCacheInformation {
-    char name[32];//MD5 name
-    UInt32 length;//file length
-    bool is_initialized;//
-    unsigned char *data;//data mapping(1byte -> 1024byte)
-};
-typedef struct LabradorCacheInformation LabradorCacheInformation;
+#import "configure.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface LabradorCache : NSObject
+@interface LabradorCacheMapping : NSObject
 - (instancetype)init NS_UNAVAILABLE ;
 - (instancetype)initWithURLString:(NSString * _Nonnull)urlString ;
-- (void)initializeLength:(NSUInteger)length ;
+- (void)configureCacheMappingWithFileSize:(NSUInteger)fileSize ;
 - (void)completedFragment:(NSUInteger)start length:(NSUInteger)length;
 - (NSRange)findNextDownloadFragment;
 - (NSRange)findNextCacheFragmentFrom:(NSUInteger)from ;
-- (BOOL)isInitializedCache;
 - (BOOL)hasEnoughData:(UInt32)minSize from:(UInt32)from ;
 - (float)cachePercent;
 @end

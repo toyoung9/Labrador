@@ -26,6 +26,7 @@
                 offset:(NSUInteger)offset
                   type:(DownloadType)type;
 
+@optional
 /**
  Audio player is ready to play
  @param information audio information

@@ -15,16 +15,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol LabradorNetworkProviderDelegate <NSObject>
 
-- (void)cacheStatusChanged:(LabradorCacheStatus)newCacheStatus ;
+- (void)statusChanged:(LabradorCacheMappingStatus)newStatus ;
 - (void)loadingPercent:(float)percent ;
-
+- (void)onError:(NSError *)error ;
 @end
 
 @interface LabradorNetworkProvider : NSObject<LabradorDataProvider>
-@property (nonatomic, assign)LabradorCacheStatus cacheStatus ;
+@property (nonatomic, assign)LabradorCacheMappingStatus cacheStatus ;
 @property (nonatomic, weak)id<LabradorNetworkProviderDelegate> delegate ;
 - (instancetype)init NS_UNAVAILABLE ;
-- (instancetype)initWithURLString:(NSString * _Nonnull)urlString delegate:(id<LabradorNetworkProviderDelegate>)delegate;
+- (instancetype)initWithURLString:(NSString * _Nonnull)urlString
+                         delegate:(id<LabradorNetworkProviderDelegate> _Nonnull)delegate;
 @end
 
 NS_ASSUME_NONNULL_END
